@@ -1,0 +1,29 @@
+{
+  "name": "command-center",
+  "version": "0.1.0",
+  "description": "Multi-repo workspace management with task tracking, PR linking, git status, architecture graphs, todos, daily/weekly standups, daily recaps, personalization, and export/import. Organize repos into workspaces, track work with Jira integration, and visualize service dependencies.",
+  "author": {
+    "name": "Lionel M. Resnik",
+    "email": "lionel.resnik@outlook.com"
+  },
+  "homepage": "https://github.com/lionelresnik/cursor-command-center-plugin",
+  "repository": "https://github.com/lionelresnik/cursor-command-center-plugin",
+  "license": "MIT",
+  "keywords": [
+    "workspace",
+    "multi-repo",
+    "monorepo",
+    "git",
+    "task-tracking",
+    "jira",
+    "architecture",
+    "mermaid",
+    "productivity",
+    "code-workspace",
+    "todo",
+    "standup",
+    "daily-recap",
+    "personalization"
+  ],
+  "logo": "assets/logo.svg"
+}
