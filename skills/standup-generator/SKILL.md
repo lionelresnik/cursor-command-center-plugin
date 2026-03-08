@@ -51,20 +51,25 @@ Gather information from these locations (in order):
 ```markdown
 # Standup — [Day, Month DD, YYYY]
 
-## Done (since last standup)
-- Completed [task] in **[workspace]** (PR: [link] if available)
-- Marked done: [todo item]
+> **TL;DR:** [1-sentence summary: what was done, what's in progress, what's next]
+
+---
+
+## Done
+- ✅ Completed [task] in **[workspace]** (PR: [#N](link))
+- ✅ Marked done: [todo item]
 
 ## In Progress
-- Working on [task] in **[workspace]**
-- [carryover note if item was also in progress yesterday]
+- 🔄 Working on [task] in **[workspace]**
+  > **Note:** [carryover note if item was also in progress yesterday]
 
 ## Up Next
-- [highest priority pending todo]
-- [next pending todo]
+- 📌 [highest priority pending todo] (`⚡ high`)
+- 📌 [next item]
 
-## Notes
-- [any blockers, stale items, or observations]
+---
+
+> **Tip:** [optional proactive suggestion based on stale items or patterns]
 ```
 
 ## Weekly Standup Format
@@ -73,20 +78,28 @@ Gather information from these locations (in order):
 # Weekly Recap — Week [W], [YYYY]
 **[Start date] → [End date]**
 
+> **TL;DR:** [1-sentence summary of the week]
+
+---
+
 ## Highlights
 - [most impactful items completed this week]
 
 ## Completed ([count] items)
-- [task] in **[workspace]** ([day completed])
+- ✅ [task] in **[workspace]** ([day completed])
 
 ## Still In Progress
-- [task] in **[workspace]** (started [day])
+- 🔄 [task] in **[workspace]** (started [day])
 
 ## Carried Over
-- [items that were pending all week]
+- 📌 [items that were pending all week]
 
 ## Next Week
-- [top priority pending items]
+- 📌 [top priority pending items]
+
+---
+
+> **Tip:** [optional proactive suggestion based on patterns]
 ```
 
 ## Generation Logic

@@ -65,7 +65,7 @@ graph TB
 6. Save the Mermaid source to `docs/[workspace]/architecture.md`
 7. Also generate an HTML file for browser viewing at `docs/[workspace]/architecture.html`:
 
-If a previous HTML exists at `~/.command-center/docs/[workspace]/architecture.html`, use it as a template — replace only the Mermaid diagram and header text. Otherwise, generate a new HTML file with these features:
+If a previous HTML exists at `docs/[workspace]/architecture.html`, use it as a template — replace only the Mermaid diagram and header text. Otherwise, generate a new HTML file with these features:
 - **ELK layout engine** via ES module imports for better node placement
 - **Hand-drawn look** (`look: handDrawn`) for modern visual style
 - **Interactive pan & zoom**: scroll to zoom, click-drag to pan, +/− buttons, fit-to-screen button
@@ -76,6 +76,10 @@ If a previous HTML exists at `~/.command-center/docs/[workspace]/architecture.ht
 Save as `docs/[workspace]/architecture.html`.
 
 8. Open the HTML file in the browser: `open docs/[workspace]/architecture.html`
+
+## Generating the HTML
+
+Always generate the full interactive HTML from scratch as described in step 7 above. The plugin handles everything natively — no external scripts needed.
 
 ## Output Format
 

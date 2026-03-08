@@ -24,14 +24,15 @@ https://github.com/user-attachments/assets/ad786927-1b77-4bfc-8490-0ca37b224341
 | Feature | Description |
 |---------|-------------|
 | **Workspace Management** | Create and manage multi-repo `.code-workspace` files from chat |
-| **Task Tracking** | Auto-creates task files with optional Jira ticket linking |
+| **Task Tracking** | Auto-creates task files with Confluence-style formatting and optional Jira linking |
 | **PR Auto-Linking** | Captures PR URLs from `gh pr create` and adds them to task files |
 | **Git Status** | Check status across all repos, auto-pull clean repos that are behind |
-| **Architecture Graphs** | Visualize service dependencies from code — zero AI tokens |
-| **Todo List** | Persistent todos across workspaces with priorities and smart queries |
-| **Standups** | Daily and weekly standup summaries from todos and task history |
+| **Architecture Graphs** | AI-generated intelligent Mermaid diagrams with interactive HTML rendering |
+| **Todo List** | Persistent todos with status icons (✅ 🔄 📌), priorities, and smart queries |
+| **Standups** | Daily/weekly summaries with TL;DR, status icons, and proactive tips |
 | **Daily Recap** | Time-aware greetings, session recaps, and standup prompts |
 | **Personalization** | Remembers your name, preferences, and work schedule across sessions |
+| **Confluence-Style Docs** | All generated markdown uses TL;DR, callout blocks, status badges, Mermaid diagrams |
 | **Export/Import** | Backup and restore everything — workspaces, todos, profile, history |
 | **Cross-Repo Context** | `@Codebase` searches all repos in your workspace at once |
 
@@ -86,21 +87,24 @@ Create, open, and manage multi-repo `.code-workspace` files. Add or remove repos
 A persistent todo list that lives across sessions and workspaces:
 
 - **Two sources**: Todos you add (`#user`) and todos Lucius detects (`#lucius`)
-- **Smart queries**: "What's next?", "What's left?", "Have I forgotten something?"
+- **Status icons (v0.2.0+)**: ✅ Done, 🔄 In Progress, 📌 Pending
+- **Ticket tagging (v0.2.0+)**: Link todos to Jira tickets/tasks (e.g., `#SLK-110873`)
+- **Smart queries**: "What's next?", "What's left?", "What's left for SLK-110873?"
 - **Auto-completion**: Lucius auto-marks his own detected todos when resolved
-- **Priorities**: High, medium, low with smart ordering
-- **Cross-workspace**: All todos in one place, tagged by workspace
+- **Priorities**: High, medium, low with smart ordering (⚡ high indicator)
+- **Cross-workspace**: All todos in one place, tagged by workspace and ticket
 
 ### Task Tracking & PR Linking
 
 - Auto-creates task files in `task-history/[workspace]/` when you start working
+- **Confluence-style formatting (v0.2.0+)**: TL;DR summaries, status badges, callout blocks (`> **Note:**`, `> **Decision:**`, `> **Warning:**`), overview tables, progress checklists with ✅/📌, collapsible file change sections, Mermaid diagrams
 - Jira ticket linking is optional — skip it and add later if discovered
 - PRs are automatically captured from `gh pr create` and `git push` output
 - Task files track PRs across multiple repos with status
 
 ### Architecture Graphs
 
-Generate Mermaid dependency diagrams by analyzing `go.mod`, `package.json`, Terraform, Docker Compose, and serverless configs. Zero AI tokens — pure static analysis.
+Lucius generates intelligent Mermaid diagrams with rich grouping and accurate connections, then wraps them in interactive HTML with click-to-highlight, BFS upstream/downstream traversal, pan/zoom, and dark theme. Uses static analysis of `go.mod`, `package.json`, Terraform, Docker Compose, and serverless configs.
 
 ### Git Status
 
@@ -121,6 +125,8 @@ Want to continue where you left off, or start something new?
 ```
 
 On new days, Lucius offers to generate a standup summary. On the first day of your work week, he offers a weekly recap instead. Standups pull from your todos, task history, and previous standups to build a done/doing/next format — saved to `~/.command-center/standups/`.
+
+**v0.2.0+ format:** TL;DR summary at top, status icons (✅ Done, 🔄 In Progress, 📌 Up Next), clean section structure with `---` separators, optional proactive tips at the bottom.
 
 Your work week is configurable (Mon–Fri or Sun–Thu) and stored in your profile.
 
@@ -213,11 +219,12 @@ All Command Center data lives in `~/.command-center/`:
 ```
 command-center/
 ├── rules/                    # Always-on AI guidance
-│   ├── task-tracking.mdc     # Jira integration, task files
+│   ├── task-tracking.mdc     # Jira integration, Confluence-style task files
 │   ├── pr-linking.mdc        # PR URL capture
 │   ├── naming-conventions.mdc
 │   ├── personalization.mdc   # Name, preferences, work schedule
 │   ├── daily-recap.mdc       # Greetings, recaps & standup prompts
+│   ├── markdown-style.mdc    # Confluence-style formatting standards (v0.2.0+)
 │   └── easter-egg.mdc        # The Fox Protocol
 ├── skills/                   # Agent capabilities
 │   ├── workspace-manager/    # Create/manage workspaces
