@@ -24,15 +24,19 @@ https://github.com/user-attachments/assets/ad786927-1b77-4bfc-8490-0ca37b224341
 | Feature | Description |
 |---------|-------------|
 | **Workspace Management** | Create and manage multi-repo `.code-workspace` files from chat |
-| **Task Tracking** | Auto-creates task files with optional Jira ticket linking |
+| **Task Tracking** | Auto-creates task files with Confluence-style formatting and optional Jira linking |
 | **PR Auto-Linking** | Captures PR URLs from `gh pr create` and adds them to task files |
+| **PR Merge Detection** | Detects when PRs are merged, offers to switch to main and pull |
 | **Git Status** | Check status across all repos, auto-pull clean repos that are behind |
-| **Architecture Graphs** | Visualize service dependencies from code — zero AI tokens |
-| **Todo List** | Persistent todos across workspaces with priorities and smart queries |
-| **Standups** | Daily and weekly standup summaries from todos and task history |
+| **Architecture Graphs** | AI-generated intelligent Mermaid diagrams with interactive HTML rendering |
+| **Todo List** | Persistent todos with status icons (✅ 🔄 📌), priorities, ticket tagging (`#PROJ-123`) |
+| **Standups** | Cross-workspace daily/weekly summaries — always fresh, human-readable descriptions |
 | **Daily Recap** | Time-aware greetings, session recaps, and standup prompts |
 | **Personalization** | Remembers your name, preferences, and work schedule across sessions |
+| **Confluence-Style Docs** | All generated markdown uses TL;DR, callout blocks, status badges, Mermaid diagrams |
+| **Auto-Doc Updates** | Findings from investigations auto-saved to `docs/` with confidence levels (confirmed/assumed) |
 | **Export/Import** | Backup and restore everything — workspaces, todos, profile, history |
+| **Migrate from CLI** | Safely migrate from CLI to plugin — preserves all data |
 | **Cross-Repo Context** | `@Codebase` searches all repos in your workspace at once |
 
 <p align="center">
@@ -86,21 +90,25 @@ Create, open, and manage multi-repo `.code-workspace` files. Add or remove repos
 A persistent todo list that lives across sessions and workspaces:
 
 - **Two sources**: Todos you add (`#user`) and todos Lucius detects (`#lucius`)
-- **Smart queries**: "What's next?", "What's left?", "Have I forgotten something?"
+- **Status icons**: ✅ Done, 🔄 In Progress, 📌 Pending
+- **Ticket tagging**: Link todos to Jira tickets/tasks (e.g., `#PROJ-123`)
+- **Smart queries**: "What's next?", "What's left?", "What's left for PROJ-123?"
 - **Auto-completion**: Lucius auto-marks his own detected todos when resolved
-- **Priorities**: High, medium, low with smart ordering
-- **Cross-workspace**: All todos in one place, tagged by workspace
+- **Priorities**: High, medium, low with smart ordering (⚡ high indicator)
+- **Cross-workspace**: All todos in one place, tagged by workspace and ticket
+- **Proactive updates**: Lucius auto-marks todos as done when the underlying work is completed
 
 ### Task Tracking & PR Linking
 
 - Auto-creates task files in `task-history/[workspace]/` when you start working
-- Jira ticket linking is optional — skip it and add later if discovered
+- **Confluence-style formatting (v0.2.0+)**: TL;DR summaries, status badges, callout blocks (`> **Note:**`, `> **Decision:**`, `> **Warning:**`), overview tables, progress checklists with ✅/📌, collapsible file change sections, Mermaid diagrams
+- Jira ticket auto-detected from branch name, context, or user message — never asks upfront
 - PRs are automatically captured from `gh pr create` and `git push` output
 - Task files track PRs across multiple repos with status
 
 ### Architecture Graphs
 
-Generate Mermaid dependency diagrams by analyzing `go.mod`, `package.json`, Terraform, Docker Compose, and serverless configs. Zero AI tokens — pure static analysis.
+Lucius generates intelligent Mermaid diagrams with rich grouping and accurate connections, then wraps them in interactive HTML with click-to-highlight, BFS upstream/downstream traversal, pan/zoom, and dark theme. Uses static analysis of `go.mod`, `package.json`, Terraform, Docker Compose, and serverless configs.
 
 ### Git Status
 
@@ -122,7 +130,21 @@ Want to continue where you left off, or start something new?
 
 On new days, Lucius offers to generate a standup summary. On the first day of your work week, he offers a weekly recap instead. Standups pull from your todos, task history, and previous standups to build a done/doing/next format — saved to `~/.command-center/standups/`.
 
+**Standups are always cross-workspace** — they aggregate work from all your workspaces into one view, with each item explaining what the issue was and what was done (not just ticket IDs).
+
+**Format:** TL;DR summary at top, status icons (✅ Done, 🔄 In Progress, 📌 Up Next), clean section structure with `---` separators, optional proactive tips at the bottom.
+
 Your work week is configurable (Mon–Fri or Sun–Thu) and stored in your profile.
+
+### Auto-Doc Updates
+
+When Lucius investigates something by reading source code or config, it automatically saves the finding to `docs/[workspace]/` — not buried in a task file. Findings are tagged:
+
+- *(no tag)* — confirmed, verified in code
+- `> ⚠️ Assumed` — inferred, not yet verified
+- `> 🔍 Investigating` — partially known, contradictory evidence
+
+General findings (useful beyond the current ticket) go to `docs/`. Task-specific notes go to `task-history/`. Lucius decides which automatically.
 
 ### Export / Import
 
@@ -161,6 +183,10 @@ Backup and restore everything — workspaces, repo lists, todos, profile, task h
 | PR linking | Captures PR URLs and adds them to task files |
 | Personalization | Remembers your name and preferences |
 | Daily recap | Time-aware greetings, session recaps, and standup prompts |
+| Markdown style | Confluence-style formatting for all generated docs |
+| Proactive task updates | Auto-updates task files, todos, and triggers post-PR-merge actions |
+| Auto-doc updates | Saves investigation findings to `docs/` with confidence tags |
+| Commit style | Never appends AI attribution tags to commit messages |
 
 ### Contextual Rules
 
@@ -204,7 +230,7 @@ All Command Center data lives in `~/.command-center/`:
 | `standups/` | Daily and weekly standup summaries |
 | `todos.md` | Persistent todo list across all workspaces |
 | `profile.json` | Your name and preferences |
-| `session-state.json` | Last session timestamp for recap detection |
+| `session-state.json` | Session timestamps for idle detection (lastSessionStart + lastSessionEnd fallback) |
 
 ---
 
@@ -212,36 +238,41 @@ All Command Center data lives in `~/.command-center/`:
 
 ```
 command-center/
-├── rules/                    # Always-on AI guidance
-│   ├── task-tracking.mdc     # Jira integration, task files
-│   ├── pr-linking.mdc        # PR URL capture
+├── rules/                         # Always-on AI guidance
+│   ├── task-tracking.mdc          # Jira integration, Confluence-style task files
+│   ├── pr-linking.mdc             # PR URL capture
 │   ├── naming-conventions.mdc
-│   ├── personalization.mdc   # Name, preferences, work schedule
-│   ├── daily-recap.mdc       # Greetings, recaps & standup prompts
-│   └── easter-egg.mdc        # The Fox Protocol
-├── skills/                   # Agent capabilities
-│   ├── workspace-manager/    # Create/manage workspaces
-│   ├── graph-generator/      # Architecture visualization
-│   ├── repo-status/          # Git status + auto-pull
-│   ├── todo-manager/         # Persistent todo list
-│   ├── standup-generator/    # Daily/weekly standup summaries
-│   └── export-import/        # Backup/restore
-├── agents/                   # Meet Lucius
-│   ├── lucius.md             # Main agent — @lucius
-│   └── lu.md                 # Quick alias — @lu
-├── commands/                 # Chat commands (/command-name)
+│   ├── personalization.mdc        # Name, preferences, work schedule
+│   ├── daily-recap.mdc            # Greetings, recaps & standup prompts
+│   ├── markdown-style.mdc         # Confluence-style formatting standards
+│   ├── proactive-task-updates.mdc # Auto task/todo updates + post-PR-merge flow
+│   ├── auto-doc-updates.mdc       # Auto-save findings to docs/ with confidence tags
+│   ├── commit-style.mdc           # No AI attribution in commit messages
+│   └── easter-egg.mdc             # The Fox Protocol
+├── skills/                        # Agent capabilities
+│   ├── workspace-manager/         # Create/manage workspaces
+│   ├── graph-generator/           # Architecture visualization (HTML, click-to-highlight)
+│   ├── repo-status/               # Git status + auto-pull
+│   ├── todo-manager/              # Persistent todo list with ticket tagging
+│   ├── standup-generator/         # Cross-workspace daily/weekly standup summaries
+│   ├── export-import/             # Backup/restore
+│   └── migrate-from-cli/          # Migrate from CLI to plugin with data preserved
+├── agents/                        # Meet Lucius
+│   ├── lucius.md                  # Main agent — @lucius
+│   └── lu.md                      # Quick alias — @lu
+├── commands/                      # Chat commands (/command-name)
 │   ├── help.md
 │   ├── setup-workspace.md
 │   ├── check-status.md
 │   ├── todos.md
-│   └── standup.md            # Daily/weekly standups
-├── assets/                   # Static assets
-│   ├── logo.svg              # Plugin logo
-│   ├── overview.png          # Feature overview screenshot
-│   └── easter-egg-art.md     # ASCII art for The Fox Protocol
-├── hooks/                    # Event automation
+│   └── standup.md                 # Daily/weekly standups
+├── assets/                        # Static assets
+│   ├── logo.svg                   # Plugin logo
+│   ├── overview.png               # Feature overview screenshot
+│   └── easter-egg-art.md          # ASCII art for The Fox Protocol
+├── hooks/                         # Event automation
 │   └── hooks.json
-└── scripts/                  # Hook implementations
+└── scripts/                       # Hook implementations
     ├── session-start.sh
     ├── session-end.sh
     └── after-shell-execution.sh
