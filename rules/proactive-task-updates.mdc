@@ -1,0 +1,79 @@
+---
+description: "Proactively detect work completion and update task files automatically. Monitors code changes, commits, and user signals to keep task history current."
+alwaysApply: true
+---
+
+# Proactive Task Updates
+
+**All data lives under `~/.command-center/`.** Task files, todos, standups, and docs are NEVER created relative to the workspace root.
+
+## When to Update Task Files
+
+### After Git Commits
+When you see a git commit:
+- Parse the commit message for task/ticket references
+- Offer to update the task file: "I see you committed '[message]'. Want me to add this to the task file?"
+
+### After PR Creation
+When `gh pr create` is executed:
+- Capture the PR URL and title (handled by `pr-linking.mdc`)
+- Update the task file automatically
+
+### After PR Merged
+When a PR is merged — either via `gh pr merge` or the user says "merged", "it's merged":
+
+1. Run `git status` to check for uncommitted changes
+2. Detect the default branch: `git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'`
+
+**If clean:** Offer to switch to main/master and pull.
+**If uncommitted changes:** List them and offer: stash+switch, discard+switch, or stay.
+
+### When User Says They're Done
+"I'm done with [task]", "Finished [X]", "Fixed [bug]":
+- Immediately update the task file and mark items complete
+
+### After Completing Todos
+When a todo is marked done and has a ticket tag (`#PROJ-123`):
+- Update the corresponding task file in `~/.command-center/task-history/[workspace]/`
+- If all todos for a ticket are done, suggest marking the task complete
+
+### After Plan Mode Sessions
+When exiting Plan mode:
+- Offer to add decisions/plan to the relevant task file
+
+## Confirm Before Writing
+
+**Creating new files = automatic.** No confirmation needed for:
+- New task files in `~/.command-center/task-history/[workspace]/`
+- New standup files in `~/.command-center/standups/`
+- New todo entries added to `~/.command-center/todos.md`
+- New docs in `~/.command-center/docs/[workspace]/`
+
+Just create them and tell the user: "Created `[filename]` — [one line what's in it]."
+
+**Updating existing files = confirm first:**
+> "I'm about to update `[filename]` — [one line describing what will change]. OK?"
+
+Only wait for confirmation when updating an existing file.
+
+## How to Update Task Files
+
+1. **Find the task file:** Check `~/.command-center/task-history/[workspace]/` for files with `status: in-progress`
+2. **Determine what changed:** Summarize work completed, files changed, decisions made
+3. **Update the right section:** Progress checklist, Key Decisions, Files Changed, Status, Updated date
+4. **Tell the user:** "Updated task file: [filename] — marked [what] as complete"
+
+## Detection Confidence
+
+| Confidence | Signal | Action |
+|-----------|--------|--------|
+| **High** | Git commit with ticket reference, user says "done", PR created | Auto-update (with confirm for existing files) |
+| **Medium** | Multiple files modified, new functions added | Ask first |
+| **Low** | Minor edits, typos, formatting | Don't interrupt |
+
+## Integration
+
+- Task updates appear in the next standup via `~/.command-center/task-history/`
+- Group related updates — don't create multiple entries for the same task
+- When a todo with a ticket tag is completed, update both `~/.command-center/todos.md` and the task file
+- After plan mode, capture key decisions in the task file's "Key Decisions" section
