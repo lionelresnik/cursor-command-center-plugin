@@ -1,9 +1,25 @@
 ---
-description: "Automatically detect new findings, features, and behaviors discovered during investigations and offer to document them. Tracks confidence levels (confirmed vs assumed)."
+description: "Automatically detect new findings, features, and behaviors discovered during investigations and offer to document them. Tracks confidence levels (confirmed vs assumed). Routes infrastructure findings (DBs, cloud resources, logs, services) to specialized docs."
 alwaysApply: false
 ---
 
 # Auto Doc Updates
+
+## Routing — Infrastructure vs General Findings
+
+**Before writing anything, classify the finding:**
+
+| Finding type | Write to |
+|-------------|----------|
+| Database connection, DB type per service, schema, migrations | `~/.command-center/docs/[workspace]/databases.md` |
+| Cloud resources (AWS/GCP/Azure accounts, S3, SQS, DynamoDB, Lambda, etc.) | `~/.command-center/docs/[workspace]/infrastructure.md` |
+| Log paths, log groups, observability tools, alert channels | `~/.command-center/docs/[workspace]/logs.md` |
+| Service dependencies, ports, env vars, external APIs | `~/.command-center/docs/[workspace]/services.md` |
+| General system behavior, features, architecture, how-tos | `~/.command-center/docs/[workspace]/[topic].md` |
+
+If the target specialized doc doesn't exist yet, create it using the template at `~/.command-center/docs/_templates/[type].md`.
+
+---
 
 ## Trigger Inline — Don't Wait
 

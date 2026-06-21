@@ -1,0 +1,225 @@
+---
+description: "Capture infrastructure knowledge as it's discovered during work — databases, cloud resources, queues, log paths, service dependencies. Writes to structured docs in ~/.command-center/docs/[workspace]/. Load when working with config files, env vars, cloud resources, DB connections, or deployment files."
+alwaysApply: false
+---
+
+# Infrastructure Knowledge Capture
+
+**Capture silently as you work. One confirmation line to the user. No interruptions.**
+
+All infrastructure docs live under `~/.command-center/docs/[workspace]/`. Never write relative to the workspace root.
+
+## Signals to Watch For
+
+Capture immediately when you see any of these:
+
+### Database Signals
+- Reading or executing DB connection strings, `DATABASE_URL`, `DB_HOST`, `DB_PORT`
+- Opening `.env`, `.env.example`, `docker-compose.yml` with DB config
+- Running `psql`, `mysql`, `mongo`, `redis-cli` commands
+- Reading migration files or ORM model definitions that reveal the DB type
+- Terraform/CloudFormation resources: `aws_db_instance`, `aws_elasticache_*`, `google_sql_database_instance`
+
+### Cloud Resource Signals
+- AWS ARNs appearing anywhere (`arn:aws:...`)
+- Resource names/IDs: S3 bucket names, SQS queue names, DynamoDB table names, Lambda function names
+- Reading `terraform.tf`, `*.tf`, `cloudformation.yaml`, CDK files
+- IAM roles, policies, or permission boundaries
+- Environment variables referencing cloud resources (`QUEUE_URL`, `BUCKET_NAME`, `TABLE_NAME`)
+- AWS account IDs, GCP project IDs, Azure subscription IDs
+
+### Log Signals
+- Log group names (`/aws/lambda/`, `/aws/ecs/`, `projects/*/logs/`)
+- Datadog, Grafana, Loki, Splunk, CloudWatch queries
+- Reading logging config files (`logback.xml`, `log4j`, `logging.yaml`)
+- User asks "where are the logs?" or "how do I check logs for X?"
+
+### Service Dependency Signals
+- Reading `go.mod`, `package.json`, `requirements.txt` — captures external service dependencies
+- API endpoints, base URLs, service hostnames in config
+- Inter-service calls (gRPC, REST) discovered in code
+
+---
+
+## Where to Write
+
+Route findings to the correct doc:
+
+| Finding type | Doc |
+|-------------|-----|
+| DB connection info, DB type per service | `~/.command-center/docs/[workspace]/databases.md` |
+| AWS/GCP/Azure accounts, S3/SQS/DynamoDB/etc | `~/.command-center/docs/[workspace]/infrastructure.md` |
+| Log paths, log groups, observability tools | `~/.command-center/docs/[workspace]/logs.md` |
+| Services, what they do, dependencies, endpoints | `~/.command-center/docs/[workspace]/services.md` |
+
+If the doc doesn't exist yet, create it using the template structure below.
+
+---
+
+## How to Write
+
+### Creating a new doc
+If the target doc doesn't exist, create it with the appropriate template (see below), then add the finding.
+
+Tell the user:
+> "Created `~/.command-center/docs/[workspace]/databases.md` and added [service] → [DB type]."
+
+### Adding to an existing doc
+Find the right section and add a row or entry. Don't rewrite the whole doc.
+
+Tell the user (one line, inline, don't interrupt flow):
+> "Added [finding] to `~/.command-center/docs/[workspace]/[doc].md`."
+
+### Confidence
+Always tag findings:
+- No tag = confirmed (you read it from source code or config)
+- `> ⚠️ **Assumed**` = inferred from naming, behavior, or partial evidence
+
+---
+
+## Doc Templates
+
+### databases.md
+
+```markdown
+# Databases — [workspace]
+
+| Service | Type | Connection | Notes |
+|---------|------|-----------|-------|
+| example-service | Postgres (RDS) | `DB_HOST` env var, port 5432 | SSL required |
+| cache | Redis | `REDIS_URL` env var | ElastiCache |
+
+## Connection Patterns
+
+### Local Development
+[How to connect locally — port-forward, local DB, etc.]
+
+### Production Access
+[How to get read access to prod — if ever needed]
+
+## Migrations
+[How migrations are run, which tool (Flyway/Liquibase/Alembic/etc.)]
+```
+
+### infrastructure.md
+
+```markdown
+# Cloud Infrastructure — [workspace]
+
+## Accounts
+
+| Account | Provider | ID | Purpose | Region |
+|---------|----------|----|---------|--------|
+| prod | AWS | 123456789012 | Production | us-east-1 |
+| dev | AWS | 987654321098 | Development | us-east-1 |
+
+## Services
+
+### Queues
+| Name | Type | Account | Used By | Purpose |
+|------|------|---------|---------|---------|
+| orders-queue | SQS | prod | checkout-service | Async order processing |
+
+### Storage
+| Name | Type | Account | Purpose | Notes |
+|------|------|---------|---------|-------|
+| uploads-bucket | S3 | prod | User file uploads | Lifecycle: 90 days |
+
+### Databases
+(see databases.md)
+
+### Compute / Serverless
+| Name | Type | Account | Trigger |
+|------|------|---------|---------|
+| process-order | Lambda | prod | SQS orders-queue |
+
+### Other
+| Name | Type | Account | Notes |
+|------|------|---------|-------|
+```
+
+### logs.md
+
+```markdown
+# Logs — [workspace]
+
+## How to Access Logs
+
+| Service | Log Location | Tool | Query Pattern |
+|---------|-------------|------|---------------|
+| api-service | CloudWatch: `/aws/ecs/api-service` | AWS Console / awslogs | `filter @message like /ERROR/` |
+| worker | Datadog | Datadog UI | `service:worker status:error` |
+
+## Common Queries
+
+### Find errors in the last hour
+```bash
+aws logs filter-log-events \
+  --log-group-name /aws/ecs/api-service \
+  --start-time $(date -d '1 hour ago' +%s000) \
+  --filter-pattern ERROR
+\```
+
+### Tail logs locally
+```bash
+# [add local log tailing command here]
+\```
+
+## Alerting
+[Where alerts go — PagerDuty, Slack channel, etc.]
+```
+
+### services.md
+
+```markdown
+# Services — [workspace]
+
+## Service Map
+
+| Service | Repo | Purpose | Owns |
+|---------|------|---------|------|
+| api-gateway | api-gateway | Public API entry point | Routes to all services |
+| user-service | user-service | User auth and profiles | users DB, sessions cache |
+| checkout-service | checkout | Order processing | orders-queue, orders DB |
+
+## Dependencies Between Services
+
+```mermaid
+graph TD
+    A[api-gateway] --> B[user-service]
+    A --> C[checkout-service]
+    C --> D[(orders DB)]
+    C --> E[SQS orders-queue]
+```
+
+## External Dependencies
+
+| Service | External Dependency | Notes |
+|---------|--------------------|----- |
+| checkout-service | Stripe API | Payment processing |
+| notification-service | SendGrid | Email delivery |
+
+## Ports (local dev)
+
+| Service | Port |
+|---------|------|
+| api-gateway | 8080 |
+| user-service | 8081 |
+```
+
+---
+
+## When User Explicitly Tells You Something
+
+If the user says things like:
+> "@lu note: the orders queue ARN is arn:aws:sqs:us-east-1:123456789:orders-queue"
+> "@lu save this: logs are in Datadog under service:checkout"
+> "@lu the prod DB is at db.prod.internal"
+
+Write it immediately to the correct doc without asking. Confirm in one line.
+
+---
+
+## Onboarding Gap Check
+
+When `@lu onboard [workspace]` is invoked, use the `onboard` skill — don't use this rule directly.
