@@ -1,6 +1,7 @@
 ---
 description: "Markdown style guide for all generated content. Ensures task files, docs, standups, and todos have Confluence-like readability with visual hierarchy, callout blocks, and structured sections."
-alwaysApply: true
+globs: ["**/*.md", "**/*.mdc", "**/task-history/**", "**/docs/**", "**/standups/**"]
+alwaysApply: false
 ---
 
 ## Markdown Style Guide

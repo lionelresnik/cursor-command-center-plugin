@@ -1,6 +1,6 @@
 ---
 description: "Commit message style rules. Never append attribution tags to commit messages."
-alwaysApply: true
+alwaysApply: false
 ---
 
 ## Commit Message Style

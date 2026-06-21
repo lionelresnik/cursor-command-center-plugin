@@ -1,0 +1,77 @@
+---
+description: "Guidance on when to use @lu (Lucius) vs the regular agent for token efficiency. Load this when the user asks about @lu, seems to be defaulting to @lu for all tasks, or asks how to save tokens."
+alwaysApply: false
+---
+
+# When to Use @lu
+
+## TL;DR
+
+`@lu` is a context-heavy agent. Use it when that context pays off. For pure coding tasks, the regular agent is more token-efficient.
+
+---
+
+## Use @lu For (context pays off)
+
+| Task | Why @lu helps |
+|------|---------------|
+| **Standup generation** | @lu already knows task history, todos, and workspace — no loading needed |
+| **Todo management** | Add, prioritize, query ("what's left?", "what's next?") — @lu has full context |
+| **Workspace switching** | @lu knows all workspaces, repos, and paths |
+| **Architecture graphs** | @lu understands repo layout and dependencies |
+| **PR linking** | @lu can find the relevant task file without being told which one |
+| **Cross-repo questions** | @lu tracks patterns across all repos in the workspace |
+| **"Where did we leave off?"** | @lu reads task-history and todos so you don't have to re-explain |
+| **Export/import** | @lu handles backup/restore commands |
+
+**Rule of thumb:** If the task requires knowing *your workspace, your history, or your todos* → use `@lu`.
+
+---
+
+## Use the Regular Agent For (save tokens)
+
+| Task | Why @lu overhead isn't worth it |
+|------|--------------------------------|
+| **Code changes** | Reading/editing code — doesn't need workspace context |
+| **Debugging** | Stack traces, logs — pure technical work |
+| **Code reviews** | Reviewing a PR or diff — self-contained |
+| **Refactoring** | Moving code around — doesn't need history |
+| **Quick questions** | "What does this function do?" — no context needed |
+| **Shell commands** | One-off terminal tasks |
+
+**Rule of thumb:** If the task is self-contained in the current file/repo → skip `@lu`.
+
+---
+
+## Token Cost Comparison
+
+| Scenario | With @lu | Without @lu | Savings |
+|----------|----------|-------------|---------|
+| Morning standup | Low (lu already loaded) | High (would need to load history manually) | ~40% |
+| Debugging a crash | High (lu loaded but unused) | Low (fresh minimal context) | ~30% |
+| Adding a feature | High (lu loaded but mostly unused) | Low | ~25% |
+| Workspace question | Low (lu knows it) | High (would need to explain) | ~50% |
+
+---
+
+## Quick Reference
+
+```
+@lu standup          → generates today's standup (best use of @lu)
+@lu todos            → shows/manages your todo list
+@lu workspace [name] → opens or switches workspace
+@lu graph            → generates architecture diagram
+
+Regular agent:       → code changes, debugging, reviews, refactoring
+```
+
+---
+
+## Tip: Slash Commands (faster than @lu for common tasks)
+
+If your Command Center plugin is installed, these load only when invoked:
+- `/standup` — generate standup without loading full @lu context
+- `/todos` — show todo list
+- `/graph` — generate architecture graph
+
+Slash commands are lighter than @lu for single-purpose tasks.

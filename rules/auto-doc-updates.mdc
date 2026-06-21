@@ -1,6 +1,6 @@
 ---
 description: "Automatically detect new findings, features, and behaviors discovered during investigations and offer to document them. Tracks confidence levels (confirmed vs assumed)."
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Auto Doc Updates

@@ -1,0 +1,172 @@
+---
+description: "Task and PR lifecycle management. Tracks work in task files, detects tickets from branch/context, captures PR URLs, and proactively updates files on commits/merges/done signals. Apply when the user is making code changes, creating files, working on tasks, or creating/merging PRs."
+globs: ["**/*.go", "**/*.ts", "**/*.py", "**/*.js", "**/*.tsx", "**/*.jsx", "**/*.tf", "**/*.java", "**/*.rb"]
+alwaysApply: false
+---
+
+# Task Lifecycle
+
+**All data lives under `~/.command-center/`.** Never create task or doc files relative to the workspace root.
+
+## Step 1: Detect Ticket Automatically
+
+**Do NOT ask the user for a ticket upfront.** Detect it automatically:
+
+1. Check the current git branch name (e.g., `feature/ABC-1234-description` → `ABC-1234`)
+2. Check if the user mentioned a ticket in their message
+3. Check `~/.command-center/task-history/[workspace]/` for an in-progress task with a ticket
+4. Check `~/.command-center/todos.md` for in-progress items with ticket tags
+
+If no ticket found, create the task file without a ticket prefix — that's fine. If a ticket is discovered later, add it to the frontmatter and rename the file to include the prefix.
+
+## Step 2: Identify the Workspace
+
+1. Read `~/.command-center/.cursor/cc-context.json` for the `"workspace"` field
+2. Check the open `.code-workspace` filename (e.g., `platform.code-workspace` → `platform`)
+3. Ask the user
+
+Only use `shared` if the task explicitly spans multiple workspaces.
+
+## Step 3: Create / Update Task File
+
+**Paths:**
+- Tasks: `~/.command-center/task-history/[workspace]/[TICKET]-description.md`
+- Docs: `~/.command-center/docs/[workspace]/[name].md`
+- Todos: `~/.command-center/todos.md`
+
+**Creating new files = automatic.** Tell the user: `"Created [filename] — [one line summary]."`
+
+**Updating existing files = confirm first:**
+> "I'm about to update `[filename]` — [one line what changes]. OK?"
+
+### Task File Template
+
+```yaml
+---
+date: YYYY-MM-DD HH:MM
+workspace: [workspace]
+ticket: [TICKET-ID]
+repos: [repo1, repo2]
+status: in-progress
+type: task
+---
+```
+
+```markdown
+# [TICKET-ID] — Short descriptive title
+
+**Status:** In Progress | **Priority:** High | **Updated:** YYYY-MM-DD
+
+> **TL;DR:** 2-3 sentence summary of the task, what's being done, and expected outcome.
+
+---
+
+## Overview
+
+| Key | Value |
+|-----|-------|
+| **Ticket** | [TICKET-ID](link) |
+| **Workspace** | [workspace] |
+| **Repos** | repo1, repo2 |
+
+---
+
+## Analysis
+
+Detailed analysis, root cause, or implementation plan.
+
+---
+
+## Progress
+
+- [x] Step completed
+- [ ] Step in progress
+
+---
+
+## Key Decisions
+
+> **Decision:** Chose approach X over Y because of Z.
+
+---
+
+<details>
+<summary>Files Changed</summary>
+
+| File | Change | Description |
+|------|--------|-------------|
+| src/auth.ts | Modified | Updated token refresh |
+
+</details>
+
+---
+
+## Pull Requests
+
+| Repo | PR | Description | Status |
+|------|-----|-------------|--------|
+| api-gateway | [#142](link) | Add retry logic | Open |
+
+---
+
+## Notes
+
+Additional context, follow-ups, or references.
+```
+
+## When to Skip
+
+Skip for: questions, reading code, one-off commands, chat-only (no file changes).
+Never skip for: file creation/modification, investigations, "save this for later".
+
+## Proactive Updates
+
+### After Git Commits
+Parse commit message for task/ticket references. Offer: "I see you committed '[message]'. Want me to add this to the task file?"
+
+### After PR Creation / Merge
+
+**PR Created:** When `gh pr create` executes:
+1. Capture the PR URL from output
+2. Add to task file under "Pull Requests" section automatically:
+
+```markdown
+| repo-name | [#N](url) | Description | Open |
+```
+
+**PR Merged:** When `gh pr merge` or user says "merged":
+1. Run `git status` to check for uncommitted changes
+2. Detect default branch: `git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'`
+3. If clean: offer to switch to main + pull
+4. If uncommitted changes: list them and offer stash+switch, discard+switch, or stay
+
+### When User Says Done
+"I'm done with [task]", "Finished [X]", "Fixed [bug]" → immediately update task file, mark items complete.
+
+### After Completing Todos
+When a todo with a ticket tag (`#PROJ-123`) is done:
+- Update the corresponding task file in `~/.command-center/task-history/[workspace]/`
+- If all todos for the ticket are done, suggest marking the task complete
+
+### After Plan Mode
+When exiting Plan mode, offer to capture decisions in the task file's "Key Decisions" section.
+
+## Detection Confidence
+
+| Confidence | Signal | Action |
+|-----------|--------|--------|
+| **High** | Git commit with ticket ref, user says "done", PR created | Auto-update (confirm for existing files) |
+| **Medium** | Multiple files modified, new functions added | Ask first |
+| **Low** | Minor edits, typos, formatting | Don't interrupt |
+
+## Task File vs Docs
+
+| Content | Goes in | Example |
+|---------|---------|---------|
+| "What I did to fix this ticket" | `task-history/[workspace]/` | Steps taken, PRs, decisions |
+| "How this system/feature works" | `docs/[workspace]/` | Behavior, architecture, how-to |
+| "Found this while fixing X, useful for future" | **Both** | docs/ gets the finding, task file gets a link |
+
+Ask: *"Would this be useful to someone who has nothing to do with this ticket?"*
+- **Yes** → `docs/[workspace]/`, link from task file
+- **No** → task file only

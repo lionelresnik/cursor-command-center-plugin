@@ -1,0 +1,82 @@
+---
+description: "Preserve in-progress findings and state before context window fills up, workspace switches, or session ends. Saves current status, open questions, and what was tried so the next session can resume without losing work."
+alwaysApply: true
+---
+
+# Context Preservation
+
+## When to Trigger
+
+Preserve context proactively in any of these situations:
+
+1. **Context pressure** — the conversation has run long, the agent mentions running long, or there are signs the context window is nearing its limit
+2. **Before workspace switch** — the user is switching to a different workspace or project
+3. **Before "start fresh"** — the user asks to start a new conversation or says "let's start over"
+4. **End of significant investigation** — multi-step investigation, debugging session, or architectural exploration that produced findings worth keeping
+5. **User says goodbye / end of day** — in combination with `daily-recap.mdc` end-of-day handling
+
+## What to Save
+
+Check `~/.command-center/docs/[workspace]/` for an existing doc on the current topic.
+
+- **If found:** Update the "Current Status" and "Open Questions" sections. Add new findings to the relevant section.
+- **If not found:** Create a new doc with the structure below.
+
+This is additive to `auto-doc-updates.mdc` (which captures completed findings). This rule focuses on **in-progress state** — things still being worked on or not yet fully understood.
+
+## In-Progress Doc Structure
+
+```markdown
+# [Topic] — Investigation Notes
+
+**Status:** In Progress | **Updated:** YYYY-MM-DD
+
+> **TL;DR:** What this investigation is about and where it stands.
+
+---
+
+## What We Know (Confirmed)
+
+Findings that are confirmed or verified in code/config.
+
+---
+
+## What We Think (Assumed)
+
+> ⚠️ **Assumed** — not yet verified
+
+Inferences, hypotheses, or partial evidence.
+
+---
+
+## What We Tried
+
+Steps taken, approaches tested, commands run — with outcomes (worked / failed / inconclusive).
+
+---
+
+## Current Status
+
+Where things stand right now. What's the next logical step.
+
+---
+
+## Open Questions
+
+- [ ] Question 1 — what we need to find out next
+- [ ] Question 2 — unresolved ambiguity
+```
+
+## How to Tell the User
+
+After saving:
+> "Saved in-progress notes to `~/.command-center/docs/[workspace]/[topic]-investigation.md` — the next session can resume from where we left off."
+
+Keep it brief. One line. Then continue or close out naturally.
+
+## What NOT to Save
+
+- Completed, closed tasks (use `task-history/` instead via `task-lifecycle.mdc`)
+- One-off commands with no reuse value
+- Transient errors or stack traces with no root cause
+- Pure speculation with zero code evidence
