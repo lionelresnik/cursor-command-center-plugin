@@ -1,0 +1,23 @@
+{
+  "id": "demo-2026-07-14-fix-jwt",
+  "demo": true,
+  "name": "[Demo] Fix JWT refresh loop",
+  "goal": "Stop infinite 401 on token refresh in auth-service",
+  "workspace": "platform",
+  "crew": "backend-crew",
+  "ticket": "AUTH-2847",
+  "agentBehavior": "ask_me",
+  "handoffMode": "manual",
+  "status": "awaiting_review",
+  "progress": 33,
+  "taskGraph": [
+    { "roleId": "backend-engineer", "roleName": "Backend Engineer", "status": "done", "dependsOn": [] },
+    { "roleId": "reviewer", "roleName": "Reviewer", "status": "pending", "dependsOn": ["backend-engineer"] },
+    { "roleId": "tech-writer", "roleName": "Tech Writer", "status": "pending", "dependsOn": ["reviewer"] }
+  ],
+  "artifactSummaries": {
+    "backend-engineer": "Excluded /refresh from auth middleware; added regression test."
+  },
+  "createdAt": "2026-07-14T09:00:00Z",
+  "updatedAt": "2026-07-14T11:30:00Z"
+}

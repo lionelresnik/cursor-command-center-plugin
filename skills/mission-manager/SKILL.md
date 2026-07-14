@@ -24,10 +24,25 @@ Mission `id`: `YYYY-MM-DD-slug` (e.g. `2026-07-14-fix-jwt`).
 
 ## Init defaults
 
-When user says `@lu init missions` or roles/crews folders are missing:
+**On plugin install** (and `@lu init missions`): run `scripts/install-mission-tools.sh` — copies default roles, crews, and dashboard generator into `~/.command-center/`. Idempotent; does not overwrite your custom roles/crews.
 
-1. Run the plugin script `scripts/install-mission-tools.sh` (copies default roles, crews, and dashboard generator into `~/.command-center/`)
-2. Confirm what was seeded and suggest `@lu dashboard`
+**Does not create demo missions.** For sample data: `@lu init demo missions`.
+
+## Demo missions
+
+**`@lu init demo missions`** (aliases: `@lu seed demo missions`)
+
+1. Run `install-mission-tools.sh` if roles/crews are missing
+2. Run `scripts/seed-demo-missions.sh` — copies 3 tagged demo missions into `~/.command-center/missions/` and writes `demo-missions.json` marker
+3. Regenerate dashboard; tell user missions are prefixed `[Demo]` and safe to delete
+
+**`@lu remove demo missions`**
+
+1. Run `scripts/remove-demo-missions.sh` — removes missions listed in `demo-missions.json`, any `demo-*` folder, and any mission with `"demo": true` in `mission.json`
+2. Keeps roles, crews, and real missions untouched
+3. Regenerate dashboard
+
+If user already has real missions, demo seed still works (skips existing folder names).
 
 ## mission.json schema
 

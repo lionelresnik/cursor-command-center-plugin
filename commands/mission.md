@@ -15,6 +15,7 @@ Use the **mission-manager** skill.
 | new mission | `@lu new mission "goal" crew:backend-crew` |
 | start role | `@lu next role` |
 | finish role | `@lu complete role` |
-| setup | `@lu init missions` (seed roles, crews, dashboard scripts) |
+| setup | `@lu init missions` (repair seed — install already copies roles/crews/tools) |
+| demo data | `@lu init demo missions` / `@lu remove demo missions` |
 
 Remind user: **regular agent for coding** after `@lu next role` delivers the prompt bundle.

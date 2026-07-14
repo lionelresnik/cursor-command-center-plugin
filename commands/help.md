@@ -56,7 +56,9 @@ These apply automatically in every session:
 - `@lu export my config`
 - `@lucius what PRs are open for this task?`
 - `@lu standup` or `@lu weekly`
-- `@lu init missions` — seed roles, crews, dashboard tools
+- `@lu init missions` — repair/seed roles, crews, dashboard tools (also runs on install)
+- `@lu init demo missions` — add 3 sample missions for the dashboard
+- `@lu remove demo missions` — delete sample missions only
 - `@lu new mission "Fix auth bug" crew:backend-crew behavior:ask_me`
 - `@lu next role` / `@lu complete role`
 - `@lu dashboard` — open mission board in Simple Browser

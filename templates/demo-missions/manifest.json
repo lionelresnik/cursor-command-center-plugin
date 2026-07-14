@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "description": "Sample missions for dashboard preview and onboarding. Safe to remove with @lu remove demo missions.",
+  "missionIds": [
+    "demo-2026-07-14-fix-jwt",
+    "demo-2026-07-12-rate-limit-doc",
+    "demo-2026-07-10-onboarding"
+  ]
+}

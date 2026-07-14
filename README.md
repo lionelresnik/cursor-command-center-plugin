@@ -7,7 +7,7 @@ A Cursor plugin that brings order to multi-repo chaos. Workspace management, tas
 **Meet Lucius** (`@lucius` or `@lu` for short) — your AI assistant who knows where everything is, how it all connects, and what needs doing next.
 
 <p align="center">
-  <a href="https://cursor.com/marketplace"><img src="https://img.shields.io/badge/Cursor-Marketplace-6366f1?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkw0IDdWMTdMMTIgMjJMMjAgMTdWN0wxMiAyWiIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+" alt="Cursor Marketplace"></a>
+  <img src="https://img.shields.io/badge/Marketplace-coming_soon-orange?style=flat" alt="Marketplace coming soon">
   <img src="https://img.shields.io/badge/version-0.2.0-blue?style=flat" alt="Version 0.2.0">
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat" alt="MIT License">
 </p>
@@ -69,13 +69,74 @@ This release merges the open feature branches into `main`:
 
 ---
 
+## Install (manual — not on Marketplace yet)
+
+Cursor loads local plugins from **`~/.cursor/plugins/local/<name>/`**. The plugin `name` is **`command-center`** (see `.cursor-plugin/plugin.json`).
+
+### Easiest: install script
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/lionelresnik/cursor-command-center-plugin/main/scripts/install-plugin.sh | bash
+```
+
+Or from a clone:
+
+```bash
+git clone https://github.com/lionelresnik/cursor-command-center-plugin.git
+cd cursor-command-center-plugin
+./scripts/install-plugin.sh
+```
+
+### Manual (same result)
+
+```bash
+git clone https://github.com/lionelresnik/cursor-command-center-plugin.git \
+  ~/.cursor/plugins/local/command-center
+chmod +x ~/.cursor/plugins/local/command-center/scripts/*.sh
+~/.cursor/plugins/local/command-center/scripts/install-mission-tools.sh
+```
+
+### After install
+
+1. **Reload Cursor** — `Cmd+Shift+P` → **Developer: Reload Window**
+2. **Enable plugin** — **Cursor Settings → Plugins** → enable **command-center**
+3. **Verify** — type `@lucius help` in chat
+
+The install script automatically seeds **roles, crews, and dashboard tools** into `~/.command-center/` (idempotent — skips files you already have).
+
+**Optional:** `@lu init demo missions` for sample missions on the dashboard; `@lu remove demo missions` to clean them up.
+
+Your data (`~/.command-center/`) is separate from the plugin — updates do not touch todos, task history, or docs.
+
+### Update to latest `main`
+
+```bash
+~/.cursor/plugins/local/command-center/scripts/install-plugin.sh
+# or: git -C ~/.cursor/plugins/local/command-center pull
+```
+
+Then **Reload Window** again.
+
+### Dev: symlink from your clone
+
+If you hack on the repo locally:
+
+```bash
+rm -rf ~/.cursor/plugins/local/command-center
+ln -s ~/Projects/cursor-command-center-plugin ~/.cursor/plugins/local/command-center
+```
+
+Reload Cursor after each change to rules/skills/agents.
+
+---
+
 ## Quick Start
 
-1. **Install the plugin** from the [Cursor Marketplace](https://cursor.com/marketplace)
+1. **Install the plugin** — see [Install](#install-manual--not-on-marketplace-yet) above (seeds roles, crews, dashboard tools automatically)
 2. **Type `@lucius help`** to see everything available (or `@lu` for short)
 3. **Follow the intro** — Lucius will ask your name and remember it
 4. **Type `@lucius setup a new workspace`** and follow the guided setup
-5. **Optional:** `@lu init missions` — seed roles, crews, and dashboard tooling
+5. **Optional:** `@lu init demo missions` — sample missions for the dashboard
 6. **Start working** — task tracking, PR linking, and todo management happen automatically
 
 ---
@@ -99,6 +160,8 @@ Lucius is your Command Center AI assistant. Type `@lucius` or `@lu` in chat and 
 @lu standup
 @lucius weekly recap
 @lu init missions
+@lu init demo missions
+@lu remove demo missions
 @lu new mission "Fix auth bug" crew:backend-crew
 @lu next role
 @lu dashboard
@@ -175,11 +238,14 @@ Findings from tasks are captured automatically (`auto-doc-updates`, `infrastruct
 
 Optional multi-role workflows for work that spans sessions (implement → review → document):
 
-1. **`@lu init missions`** — copy default roles/crews and dashboard tools to `~/.command-center/`
-2. **`@lu new mission "…" crew:backend-crew behavior:ask_me`** — create a mission
-3. **`@lu next role`** — get the role prompt bundle (then use the **regular agent** for coding)
-4. **`@lu complete role`** — save artifact; mission pauses for review (default)
-5. **`@lu dashboard`** — regenerate and open the static board in Simple Browser
+1. **Install the plugin** — roles/crews/dashboard tools are seeded automatically (or run `@lu init missions` to repair)
+2. **`@lu init demo missions`** — optional sample missions for the board
+3. **`@lu new mission "…" crew:backend-crew behavior:ask_me`** — create a mission
+4. **`@lu next role`** — get the role prompt bundle (then use the **regular agent** for coding)
+5. **`@lu complete role`** — save artifact; mission pauses for review (default)
+6. **`@lu dashboard`** — regenerate and open the static board in Simple Browser
+
+Remove sample data anytime: **`@lu remove demo missions`** (keeps roles, crews, and your real missions).
 
 **Agent behavior modes** (per mission):
 
@@ -189,7 +255,21 @@ Optional multi-role workflows for work that spans sessions (implement → review
 | `ask_me` | Up to 3 blocking `QUESTION:` lines — waits for you |
 | `async` | Log `ASYNC_QUESTION:` at end; keeps going |
 
-**Ad-hoc work** still uses `task-history/` — missions are optional. Plan-first workflows: run a planning crew or single-role mission, then start a backend crew mission that reads the plan artifact.
+**Ad-hoc work** still uses `task-history/` — missions are optional.
+
+#### Plan mode and missions
+
+Plain Cursor Plan mode hands off via **Build** on the plan markdown (`.cursor/plans/`). CC missions are **file-based** — they do not auto-read Plan mode output or chat context.
+
+| Step | What to do |
+|------|------------|
+| After Plan mode | Save decisions to the **task file** (`Analysis`, `Key Decisions`) — Lucius offers this when exiting Plan mode |
+| Create mission | `@lu new mission "…" crew:backend-crew ticket:AUTH-123` — links via `ticket` + `missionId` in task frontmatter |
+| Start work | `@lu next role` — role prompt should include linked task file sections (not full chat history) |
+
+If the plan never reached the task file, the mission only gets the one-line `goal` unless you use `@lu checkpoint` or save the plan first. For simple fixes, use Cursor **Build** directly; use missions when you want crew handoffs across sessions.
+
+Plan-first with crews: run a planning step into the task file (or a prior mission artifact), then start a backend crew mission that reads that file.
 
 ### Export / Import
 
@@ -327,9 +407,10 @@ command-center/
 │   ├── mission-manager/
 │   ├── migrate-from-cli/
 │   └── export-import/
-├── templates/                # Default roles & crews (seed on @lu init missions)
+├── templates/                # Default roles, crews, demo missions
 │   ├── roles/
-│   └── crews/
+│   ├── crews/
+│   └── demo-missions/
 ├── agents/
 │   └── lucius.md             # @lucius and @lu
 ├── commands/
@@ -353,7 +434,10 @@ command-center/
     ├── after-shell-execution.sh
     ├── generate-dashboard.py
     ├── generate-dashboard.sh
-    └── install-mission-tools.sh
+    ├── install-mission-tools.sh
+    ├── seed-demo-missions.sh
+    ├── remove-demo-missions.sh
+    └── install-plugin.sh       # Install/update into ~/.cursor/plugins/local/
 ```
 
 ---

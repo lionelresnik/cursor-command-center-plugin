@@ -1,0 +1,21 @@
+{
+  "id": "demo-2026-07-10-onboarding",
+  "demo": true,
+  "name": "[Demo] Onboard supply-chain workspace",
+  "goal": "Fill infra and logs gaps for supply-chain workspace",
+  "workspace": "supply-chain",
+  "crew": "docs-crew",
+  "ticket": null,
+  "agentBehavior": "async",
+  "handoffMode": "manual",
+  "status": "done",
+  "progress": 100,
+  "taskGraph": [
+    { "roleId": "tech-writer", "roleName": "Tech Writer", "status": "done", "dependsOn": [] }
+  ],
+  "artifactSummaries": {
+    "tech-writer": "Created databases.md and logs.md under docs/supply-chain/."
+  },
+  "createdAt": "2026-07-10T10:00:00Z",
+  "updatedAt": "2026-07-10T16:00:00Z"
+}

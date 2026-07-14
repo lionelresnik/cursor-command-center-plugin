@@ -287,7 +287,7 @@
       const missions = DATA.missions || [];
       if (missions.length === 0) {
         document.getElementById("missions").innerHTML =
-          '<p style="color:var(--muted);font-size:13px">No missions yet. Run <code>@lu init missions</code> then <code>@lu new mission</code>.</p>';
+          '<p style="color:var(--muted);font-size:13px">No missions yet. Run <code>@lu new mission</code> or <code>@lu init demo missions</code>.</p>';
         return;
       }
       const active = missions.filter(m => m.status !== "done");
@@ -353,7 +353,7 @@
           <div class="crew-name">${esc(c.name)}</div>
           <div class="crew-chain">${esc(c.chain)}</div>
         </div>`
-      ).join("") : '<p style="color:var(--muted);font-size:12px">Run <code>@lu init missions</code> to seed crews.</p>';
+      ).join("") : '<p style="color:var(--muted);font-size:12px">Reinstall plugin or run <code>@lu init missions</code>.</p>';
     }
 
     function renderTodos() {

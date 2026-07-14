@@ -1,0 +1,19 @@
+{
+  "id": "demo-2026-07-12-rate-limit-doc",
+  "demo": true,
+  "name": "[Demo] Document rate limiting",
+  "goal": "Confirm per-tenant limits and update runbook",
+  "workspace": "platform",
+  "crew": "docs-crew",
+  "ticket": null,
+  "agentBehavior": "assume_and_document",
+  "handoffMode": "manual",
+  "status": "running",
+  "progress": 50,
+  "taskGraph": [
+    { "roleId": "tech-writer", "roleName": "Tech Writer", "status": "running", "dependsOn": [] }
+  ],
+  "artifactSummaries": {},
+  "createdAt": "2026-07-12T14:00:00Z",
+  "updatedAt": "2026-07-14T08:00:00Z"
+}
