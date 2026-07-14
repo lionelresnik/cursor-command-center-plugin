@@ -2,6 +2,19 @@
 
 All notable changes to the Command Center Cursor plugin.
 
+## [0.2.3] — 2026-07-14
+
+### Fixed
+- **`capture_pr_url`:** Append to JSON list instead of overwrite — multiple PRs in one session now preserved
+- **`detect_workspace`:** Log warning to `session-debug.log` when multiple workspaces match the current directory
+
+### Added
+- `tests/test_cc_session.py` — 14 pytest cases covering session start, todo counting, ISO timestamp parsing, PR URL capture/append/dedup
+- `CONTRIBUTING.md` — dev setup, plugin structure, rule loading, data paths, PR checklist
+
+### Changed
+- Easter egg (Fox Protocol) moved from `rules/easter-egg.mdc` into `agents/lucius.md` — frees a rule slot, behaviour unchanged
+
 ## [0.2.2] — 2026-07-14
 
 ### Fixed

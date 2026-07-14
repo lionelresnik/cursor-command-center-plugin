@@ -117,10 +117,15 @@ def detect_workspace(cwd: Path) -> tuple[str, str, int]:
                 matches.append(ws_name)
                 break
 
+    all_count = len(list(contexts.glob("*.repos")))
     if len(matches) == 1:
-        return matches[0], last_workspace, len(list(contexts.glob("*.repos")))
+        return matches[0], last_workspace, all_count
     if len(matches) > 1:
-        return matches[0], last_workspace, len(list(contexts.glob("*.repos")))
+        log_debug(
+            f"detect_workspace: multiple workspaces match {cwd_s!r}: {matches} — using first. "
+            "Check ~/.command-center/contexts/ for duplicate repo paths."
+        )
+        return matches[0], last_workspace, all_count
 
     all_ws = list(contexts.glob("*.repos"))
     if len(all_ws) == 1:
@@ -213,11 +218,20 @@ def session_end() -> None:
 def capture_pr_url(output: str) -> None:
     import re
 
-    match = re.search(r"https://github.com/\S+/pull/\d+", output)
-    if not match:
+    found = re.findall(r"https://github.com/\S+/pull/\d+", output)
+    if not found:
         return
     CC_DIR.mkdir(parents=True, exist_ok=True)
-    PR_DETECT_FILE.write_text(match.group(0) + "\n", encoding="utf-8")
+    existing: list[str] = []
+    if PR_DETECT_FILE.exists():
+        try:
+            existing = json.loads(PR_DETECT_FILE.read_text(encoding="utf-8"))
+            if not isinstance(existing, list):
+                existing = [existing] if existing else []
+        except (json.JSONDecodeError, OSError):
+            existing = []
+    merged = existing + [u for u in found if u not in existing]
+    PR_DETECT_FILE.write_text(json.dumps(merged, indent=2) + "\n", encoding="utf-8")
 
 
 def main() -> int:

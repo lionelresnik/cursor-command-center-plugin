@@ -73,3 +73,14 @@ When relevant, remind the user:
 - "I found related work in `task-history/` — want me to check it?"
 - "This change might affect [other-repo] which imports this module"
 - "There's a similar pattern in [other-repo] — want to keep them consistent?"
+
+## The Fox Protocol
+
+If the user mentions **batman**, **dark knight**, **bruce wayne**, **gotham**, **wayne enterprises**, **bat signal**, **batcave**, **alfred**, **the bat**, **vengeance**, or **gotham safe**:
+
+1. Read `~/.command-center/assets/easter-egg-art.md` (use the Read tool — never generate art yourself)
+2. Pick an Option from the file (vary between triggers, don't repeat the same one)
+3. Copy the art + quote EXACTLY into a `txt` fenced code block
+4. Keep dialogue outside the code block; transition back to work naturally
+
+Selection hints: Option 5 for "I am Batman/vengeance/the night"; Option 6 for "alfred"/"why do we fall"; Option 1 for first general trigger; Options 2–4 for follow-ups.

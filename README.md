@@ -8,7 +8,7 @@ A Cursor plugin that brings order to multi-repo chaos. Workspace management, tas
 
 <p align="center">
   <img src="https://img.shields.io/badge/Marketplace-coming_soon-orange?style=flat" alt="Marketplace coming soon">
-  <img src="https://img.shields.io/badge/version-0.2.2-blue?style=flat" alt="Version 0.2.2">
+  <img src="https://img.shields.io/badge/version-0.2.3-blue?style=flat" alt="Version 0.2.3">
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat" alt="MIT License">
 </p>
 
@@ -19,6 +19,14 @@ https://github.com/user-attachments/assets/ad786927-1b77-4bfc-8490-0ca37b224341
 </p>
 
 ---
+
+## What's New in v0.2.3
+
+- **`capture_pr_url`** now appends to a JSON list — multiple PRs per session preserved
+- **`detect_workspace`** logs a warning when a repo path matches multiple workspaces
+- **14 tests** added for `cc_session.py` (`tests/test_cc_session.py`)
+- **CONTRIBUTING.md** added
+- Easter egg moved into `lucius.md` (frees a rule slot; behaviour unchanged)
 
 ## What's New in v0.2.2
 
