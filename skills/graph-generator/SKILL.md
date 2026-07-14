@@ -29,7 +29,7 @@ When user asks for an architecture graph:
    - Check `.cursor/cc-context.json` for `"workspace"` field
    - Check the open `.code-workspace` filename (e.g., `platform.code-workspace` → workspace is `platform`)
    - Ask the user
-2. Read the repo list from `contexts/[workspace].repos`
+2. Read the repo list from `~/.command-center/contexts/[workspace].repos`
 3. For each repo, scan for dependency files:
 
 ```bash
@@ -62,8 +62,8 @@ graph TB
     end
 ```
 
-6. Save the Mermaid source to `docs/[workspace]/architecture.md`
-7. Also generate an HTML file for browser viewing at `docs/[workspace]/architecture.html`:
+6. Save the Mermaid source to `~/.command-center/docs/[workspace]/architecture.md`
+7. Also generate an HTML file for browser viewing at `~/.command-center/docs/[workspace]/architecture.html`:
 
 If a previous HTML exists at `~/.command-center/docs/[workspace]/architecture.html`, use it as a template — replace only the Mermaid diagram and header text. Otherwise, generate a new HTML file with these features:
 - **ELK layout engine** via ES module imports for better node placement
@@ -73,13 +73,17 @@ If a previous HTML exists at `~/.command-center/docs/[workspace]/architecture.ht
 - **Click-to-highlight**: clicking a node highlights its full upstream/downstream flow chain, dims everything else, and shows an info panel with connections
 - **Frontmatter config** in the Mermaid code block for layout settings
 
-Save as `docs/[workspace]/architecture.html`.
+Save as `~/.command-center/docs/[workspace]/architecture.html`.
 
-8. Open the HTML file in the browser: `open docs/[workspace]/architecture.html`
+8. Open the HTML file in the browser: `open ~/.command-center/docs/[workspace]/architecture.html`
+
+## Generating the HTML
+
+Always generate the full interactive HTML from scratch as described in step 7 above — no external scripts needed.
 
 ## Output Format
 
-Save as a markdown file with a Mermaid code block at `docs/[workspace]/architecture.md`:
+Save as a markdown file with a Mermaid code block at `~/.command-center/docs/[workspace]/architecture.md`:
 
     # Architecture: [workspace]
 
