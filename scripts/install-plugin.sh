@@ -13,7 +13,12 @@ if [ -d "$PLUGIN_DIR/.git" ]; then
   echo "→ Updating existing clone…"
   git -C "$PLUGIN_DIR" fetch origin
   git -C "$PLUGIN_DIR" checkout main
-  git -C "$PLUGIN_DIR" pull --ff-only origin main
+  if ! git -C "$PLUGIN_DIR" pull --ff-only origin main 2>/dev/null; then
+    echo "→ Local changes block update — resetting install to origin/main"
+    echo "  (Your data in ~/.command-center/ is unchanged.)"
+    git -C "$PLUGIN_DIR" reset --hard origin/main
+    git -C "$PLUGIN_DIR" clean -fd
+  fi
 elif [ -d "$PLUGIN_DIR" ]; then
   echo "→ Backing up existing folder to ${PLUGIN_DIR}.bak.$(date +%Y%m%d%H%M%S)"
   mv "$PLUGIN_DIR" "${PLUGIN_DIR}.bak.$(date +%Y%m%d%H%M%S)"
@@ -24,6 +29,7 @@ else
 fi
 
 chmod +x "$PLUGIN_DIR"/scripts/*.sh 2>/dev/null || true
+chmod +x "$PLUGIN_DIR"/scripts/cc_session.py "$PLUGIN_DIR"/scripts/cc_lock.py 2>/dev/null || true
 chmod +x "$PLUGIN_DIR"/scripts/generate-dashboard.py 2>/dev/null || true
 
 echo "→ Seeding mission roles, crews, and dashboard tools…"

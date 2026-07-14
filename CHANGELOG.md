@@ -2,6 +2,15 @@
 
 All notable changes to the Command Center Cursor plugin.
 
+## [0.2.2] — 2026-07-14
+
+### Fixed
+- **install-plugin.sh:** Auto-reset dirty clones when `git pull` is blocked by local changes
+- **install-plugin.sh:** `chmod +x` for `cc_session.py`, `cc_lock.py`, and all shell scripts after install
+
+### Added
+- README **Troubleshooting** section for blocked plugin updates
+
 ## [0.2.1] — 2026-07-14
 
 ### Fixed

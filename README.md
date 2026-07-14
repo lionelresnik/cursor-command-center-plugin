@@ -8,7 +8,7 @@ A Cursor plugin that brings order to multi-repo chaos. Workspace management, tas
 
 <p align="center">
   <img src="https://img.shields.io/badge/Marketplace-coming_soon-orange?style=flat" alt="Marketplace coming soon">
-  <img src="https://img.shields.io/badge/version-0.2.1-blue?style=flat" alt="Version 0.2.1">
+  <img src="https://img.shields.io/badge/version-0.2.2-blue?style=flat" alt="Version 0.2.2">
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat" alt="MIT License">
 </p>
 
@@ -19,6 +19,12 @@ https://github.com/user-attachments/assets/ad786927-1b77-4bfc-8490-0ca37b224341
 </p>
 
 ---
+
+## What's New in v0.2.2
+
+- **Install script** auto-resets dirty plugin clones on update (local edits in the install folder only)
+- **README** troubleshooting for blocked `git pull` during updates
+- Script executable bits fixed for `cc_session.py`, `cc_lock.py`, `install-mission-tools.sh`
 
 ## What's New in v0.2.1
 
@@ -113,6 +119,8 @@ cd cursor-command-center-plugin
 git clone https://github.com/lionelresnik/cursor-command-center-plugin.git \
   ~/.cursor/plugins/local/command-center
 chmod +x ~/.cursor/plugins/local/command-center/scripts/*.sh
+chmod +x ~/.cursor/plugins/local/command-center/scripts/cc_session.py \
+         ~/.cursor/plugins/local/command-center/scripts/cc_lock.py
 ~/.cursor/plugins/local/command-center/scripts/install-mission-tools.sh
 ```
 
@@ -136,6 +144,29 @@ Your data (`~/.command-center/`) is separate from the plugin — updates do not 
 ```
 
 Then **Reload Window** again.
+
+### Troubleshooting: `git pull` blocked by local changes
+
+If an old install has edited or untracked files, `git pull` may abort. Your **`~/.command-center/` data is safe** — only the plugin copy under `~/.cursor/plugins/local/command-center/` is affected.
+
+**Fix (recommended):** re-run the install script — it resets a dirty clone automatically:
+
+```bash
+~/.cursor/plugins/local/command-center/scripts/install-plugin.sh
+```
+
+**Or manually:**
+
+```bash
+cd ~/.cursor/plugins/local/command-center
+git fetch origin
+git reset --hard origin/main
+git clean -fd
+chmod +x scripts/*.sh scripts/cc_session.py scripts/cc_lock.py
+./scripts/install-mission-tools.sh
+```
+
+Then **Reload Window**.
 
 ### Dev: symlink from your clone
 
