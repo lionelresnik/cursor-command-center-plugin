@@ -1,0 +1,23 @@
+---
+description: "Capture ASSUMPTION lines from mission role output into workspace docs. Apply when completing a mission role or when agent output contains ASSUMPTION prefixes."
+alwaysApply: false
+---
+
+# Assumption Capture
+
+When role output or chat contains lines starting with `ASSUMPTION:`:
+
+1. Strip the prefix and trim whitespace
+2. Append to `~/.command-center/docs/[workspace]/assumptions.md` (create if missing)
+3. Format:
+
+```markdown
+## YYYY-MM-DD — [mission name or topic]
+
+- ⚠️ **Assumed:** [text] — from [roleName] mission [missionId]
+```
+
+4. Do not duplicate the same assumption verbatim in the same file
+5. Tell user briefly: "Logged N assumption(s) to docs/[workspace]/assumptions.md"
+
+Also compatible with `auto-doc-updates.mdc` confidence markers when user confirms later.

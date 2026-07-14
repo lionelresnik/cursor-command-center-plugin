@@ -20,6 +20,8 @@ Type `@lucius` or `@lu` in chat, then ask naturally. Or use these shortcuts:
 | `/check-status` | Git status across all repos in a workspace |
 | `/todos` | Show and manage your persistent todo list |
 | `/standup` | Generate a daily or weekly standup summary |
+| `/mission` | Mission status, crews, next role guidance |
+| `/dashboard` | Regenerate static mission board (Simple Browser) |
 
 ## Skills (I use these automatically based on what you ask)
 
@@ -31,6 +33,8 @@ Type `@lucius` or `@lu` in chat, then ask naturally. Or use these shortcuts:
 | `export-import` | Backup and restore configurations |
 | `todo-manager` | Persistent todo list — add, complete, query, prioritize |
 | `standup-generator` | Daily/weekly standup summaries from todos and task history |
+| `mission-manager` | Missions, crews, roles — new/next/complete role, handoff gates |
+| `onboard` | Workspace knowledge gap inventory |
 
 ## Always-On Rules
 
@@ -52,6 +56,10 @@ These apply automatically in every session:
 - `@lu export my config`
 - `@lucius what PRs are open for this task?`
 - `@lu standup` or `@lu weekly`
+- `@lu init missions` — seed roles, crews, dashboard tools
+- `@lu new mission "Fix auth bug" crew:backend-crew behavior:ask_me`
+- `@lu next role` / `@lu complete role`
+- `@lu dashboard` — open mission board in Simple Browser
 
 ## Data Location
 
@@ -61,6 +69,10 @@ All Command Center data lives in `~/.command-center/`:
 - `task-history/` — work logs organized by workspace
 - `docs/` — reference guides organized by workspace
 - `standups/` — daily and weekly standup summaries
+- `roles/` — mission role prompts (`*.md`)
+- `crews/` — ordered role lists (`*.yaml`)
+- `missions/` — mission state, artifacts, checkpoints
+- `dashboard/index.html` — generated static board (run `@lu dashboard`)
 
 ## Tips
 

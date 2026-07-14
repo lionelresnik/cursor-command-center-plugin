@@ -21,7 +21,8 @@ alwaysApply: false
 | **Architecture graphs** | @lu understands repo layout and dependencies |
 | **PR linking** | @lu can find the relevant task file without being told which one |
 | **Cross-repo questions** | @lu tracks patterns across all repos in the workspace |
-| **"Where did we leave off?"** | @lu reads task-history and todos so you don't have to re-explain |
+| **"Where did we leave off?"** | @lu reads task-history, todos, and active missions |
+| **Mission / crew handoffs** | @lu knows roles, mission status, and next step |
 | **Export/import** | @lu handles backup/restore commands |
 
 **Rule of thumb:** If the task requires knowing *your workspace, your history, or your todos* → use `@lu`.
@@ -59,6 +60,9 @@ alwaysApply: false
 ```
 @lu standup          → generates today's standup (best use of @lu)
 @lu todos            → shows/manages your todo list
+@lu mission status   → active missions and next role
+@lu next role        → start next crew role (then use regular agent to code)
+@lu dashboard        → regenerate static mission board
 @lu workspace [name] → opens or switches workspace
 @lu graph            → generates architecture diagram
 
@@ -71,6 +75,8 @@ Regular agent:       → code changes, debugging, reviews, refactoring
 
 If your Command Center plugin is installed, these load only when invoked:
 - `/standup` — generate standup without loading full @lu context
+- `/mission` — mission status and crew guidance
+- `/dashboard` — regenerate static board
 - `/todos` — show todo list
 - `/graph` — generate architecture graph
 

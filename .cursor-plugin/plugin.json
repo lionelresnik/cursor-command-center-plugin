@@ -1,7 +1,7 @@
 {
   "name": "command-center",
-  "version": "0.1.0",
-  "description": "Multi-repo workspace management with task tracking, PR linking, git status, architecture graphs, todos, daily/weekly standups, daily recaps, personalization, and export/import. Organize repos into workspaces, track work with Jira integration, and visualize service dependencies.",
+  "version": "0.2.0",
+  "description": "Multi-repo workspace management with task tracking, PR linking, git status, architecture graphs, todos, standups, missions and crews, static dashboard, daily recaps, personalization, and export/import.",
   "author": {
     "name": "Lionel M. Resnik",
     "email": "lionel.resnik@outlook.com"
@@ -23,7 +23,11 @@
     "todo",
     "standup",
     "daily-recap",
-    "personalization"
+    "personalization",
+    "mission",
+    "crew",
+    "roles",
+    "dashboard"
   ],
   "logo": "assets/logo.svg"
 }

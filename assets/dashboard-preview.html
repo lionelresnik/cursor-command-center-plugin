@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command Center — Dashboard (preview)</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #181b24;
+      --border: #2a2f3a;
+      --text: #e8eaed;
+      --muted: #9aa0a6;
+      --accent: #6366f1;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --blue: #3b82f6;
+      --orange: #f97316;
+      --red: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    .banner {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 24px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .banner strong { color: var(--yellow); }
+    header {
+      padding: 24px 24px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    h1 { font-size: 1.5rem; font-weight: 700; }
+    .subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    button, .btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    button:hover { border-color: var(--accent); }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      padding: 0 24px 20px;
+    }
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .stat-value { font-size: 1.75rem; font-weight: 700; }
+    .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+      padding: 0 24px 32px;
+    }
+    @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } }
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .section-head {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .section-body { padding: 16px 18px; }
+    .mission {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .mission:last-child { margin-bottom: 0; }
+    .mission-top { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+    .mission-title { font-weight: 600; font-size: 14px; }
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .badge-review { background: #422006; color: var(--yellow); }
+    .badge-running { background: #172554; color: var(--blue); }
+    .badge-done { background: #14532d; color: var(--green); }
+    .badge-pending { background: #27272a; color: var(--muted); }
+    .meta { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+    .meta span { margin-right: 12px; }
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 999px; }
+    .roles { display: flex; flex-direction: column; gap: 6px; }
+    .role-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      padding: 8px 10px;
+      background: var(--bg);
+      border-radius: 8px;
+      border: 1px solid transparent;
+    }
+    .role-row.active { border-color: var(--yellow); background: #1c1910; }
+    .role-row.done { opacity: 0.85; }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .dot-done { background: var(--green); }
+    .dot-active { background: var(--yellow); }
+    .dot-pending { background: var(--border); }
+    .role-name { flex: 1; font-weight: 500; }
+    .role-status { color: var(--muted); font-size: 11px; }
+    .handoff {
+      margin-top: 12px;
+      padding: 12px;
+      background: #1c1910;
+      border: 1px solid #713f12;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+    .handoff strong { color: var(--yellow); }
+    .handoff-actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .sidebar-block { margin-bottom: 16px; }
+    .sidebar-block:last-child { margin-bottom: 0; }
+    .list-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .list-item:last-child { border-bottom: none; }
+    .color-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .todo-priority-high { color: var(--red); }
+    .todo-priority-med { color: var(--orange); }
+    .crew-card {
+      padding: 10px 12px;
+      background: var(--bg);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    .crew-card:last-child { margin-bottom: 0; }
+    .crew-name { font-weight: 600; margin-bottom: 4px; }
+    .crew-chain { color: var(--muted); font-size: 11px; }
+    footer {
+      padding: 16px 24px 24px;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    code { background: var(--bg); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <span><strong>Preview</strong> — mock data · generated static HTML · no server</span>
+    <span>Regenerate via <code>@lu dashboard</code> (planned)</span>
+  </div>
+
+  <header>
+    <div>
+      <h1>Command Center</h1>
+      <p class="subtitle">Good afternoon, Lionel · workspace: <strong>platform</strong> · updated 2026-07-14 12:35</p>
+    </div>
+    <div class="header-actions">
+      <button type="button">↻ Refresh</button>
+      <button type="button" class="primary">+ New mission</button>
+    </div>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="layout">
+    <div>
+      <section>
+        <div class="section-head">
+          <span>Missions</span>
+          <span style="color: var(--muted); font-weight: 400;">2 active · 1 awaiting review</span>
+        </div>
+        <div class="section-body" id="missions"></div>
+      </section>
+    </div>
+
+    <div>
+      <section style="margin-bottom: 16px;">
+        <div class="section-head">Workspaces</div>
+        <div class="section-body" id="workspaces"></div>
+      </section>
+      <section style="margin-bottom: 16px;">
+        <div class="section-head">Crews</div>
+        <div class="section-body" id="crews"></div>
+      </section>
+      <section>
+        <div class="section-head">Todos</div>
+        <div class="section-body" id="todos"></div>
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    Open in Cursor: <code>Cmd+Shift+P → Simple Browser: Show</code> → paste the file URL below.<br />
+    File: <code id="file-path"></code>
+  </footer>
+
+  <script>
+    // Mock data — in production, the @lu dashboard skill inlines this from ~/.command-center/
+    const DATA = {
+      user: { name: "Lionel" },
+      workspace: "platform",
+      generatedAt: "2026-07-14T12:35:00+03:00",
+      stats: {
+        activeMissions: 2,
+        awaitingReview: 1,
+        openTodos: 7,
+        workspaces: 3,
+      },
+      missions: [
+        {
+          id: "2026-07-14-fix-jwt",
+          name: "Fix JWT refresh loop",
+          goal: "Stop infinite 401 on token refresh in auth-service",
+          workspace: "platform",
+          crew: "backend-crew",
+          agentBehavior: "ask_me",
+          handoffMode: "manual",
+          status: "awaiting_review",
+          progress: 33,
+          ticket: "AUTH-2847",
+          roles: [
+            { name: "Backend Engineer", status: "done", summary: "Excluded /refresh from auth middleware" },
+            { name: "Reviewer", status: "active", summary: "Waiting for you to start" },
+            { name: "Tech Writer", status: "pending", summary: null },
+          ],
+          assumptions: 2,
+          lastArtifact: "artifacts/backend-engineer.md",
+        },
+        {
+          id: "2026-07-12-rate-limit-doc",
+          name: "Document rate limiting",
+          goal: "Confirm per-tenant limits and update runbook",
+          workspace: "platform",
+          crew: "docs-crew",
+          agentBehavior: "assume_and_document",
+          handoffMode: "manual",
+          status: "running",
+          progress: 50,
+          ticket: null,
+          roles: [
+            { name: "Researcher", status: "done", summary: "Observed 429 at 100 req/min" },
+            { name: "Tech Writer", status: "active", summary: "Drafting runbook section" },
+          ],
+          assumptions: 1,
+          lastArtifact: "artifacts/researcher.md",
+        },
+        {
+          id: "2026-07-10-onboarding",
+          name: "Onboard supply-chain workspace",
+          goal: "Fill infra + logs gaps for supply-chain",
+          workspace: "supply-chain",
+          crew: "onboard-crew",
+          agentBehavior: "async",
+          handoffMode: "manual",
+          status: "done",
+          progress: 100,
+          ticket: null,
+          roles: [
+            { name: "Onboarder", status: "done", summary: "Created databases.md, logs.md" },
+          ],
+          assumptions: 0,
+          lastArtifact: "artifacts/onboarder.md",
+        },
+      ],
+      workspaces: [
+        { name: "platform", color: "#6366f1", repos: 4, missions: 2, todos: 4 },
+        { name: "supply-chain", color: "#22c55e", repos: 6, missions: 0, todos: 2 },
+        { name: "shared", color: "#9aa0a6", repos: 2, missions: 0, todos: 1 },
+      ],
+      crews: [
+        { id: "backend-crew", name: "Backend Crew", chain: "Backend Engineer → Reviewer → Tech Writer" },
+        { id: "docs-crew", name: "Docs Crew", chain: "Researcher → Tech Writer" },
+        { id: "onboard-crew", name: "Onboard Crew", chain: "Onboarder" },
+      ],
+      todos: [
+        { text: "Fix retry logic in API gateway", priority: "high", workspace: "platform", source: "user" },
+        { text: "Review assumed rate-limit KB entry", priority: "med", workspace: "platform", source: "lucius" },
+        { text: "Link PR to AUTH-2847 task file", priority: "med", workspace: "platform", source: "user" },
+        { text: "Regenerate architecture graph", priority: "low", workspace: "supply-chain", source: "user" },
+      ],
+    };
+
+    function badgeClass(status) {
+      if (status === "awaiting_review") return "badge-review";
+      if (status === "running") return "badge-running";
+      if (status === "done") return "badge-done";
+      return "badge-pending";
+    }
+
+    function badgeLabel(status) {
+      if (status === "awaiting_review") return "Awaiting review";
+      if (status === "running") return "Running";
+      if (status === "done") return "Done";
+      return status;
+    }
+
+    function behaviorLabel(b) {
+      return { ask_me: "Ask me", assume_and_document: "Assume & document", async: "Async questions" }[b] || b;
+    }
+
+    function renderStats() {
+      const s = DATA.stats;
+      document.getElementById("stats").innerHTML = [
+        { v: s.activeMissions, l: "Active missions" },
+        { v: s.awaitingReview, l: "Awaiting review" },
+        { v: s.openTodos, l: "Open todos" },
+        { v: s.workspaces, l: "Workspaces" },
+      ].map(x => `<div class="stat"><div class="stat-value">${x.v}</div><div class="stat-label">${x.l}</div></div>`).join("");
+    }
+
+    function renderMissions() {
+      const active = DATA.missions.filter(m => m.status !== "done");
+      const done = DATA.missions.filter(m => m.status === "done").slice(0, 1);
+      const list = [...active, ...done];
+
+      document.getElementById("missions").innerHTML = list.map(m => {
+        const rolesHtml = m.roles.map(r => {
+          const dot = r.status === "done" ? "dot-done" : r.status === "active" ? "dot-active" : "dot-pending";
+          const cls = r.status === "active" ? "role-row active" : r.status === "done" ? "role-row done" : "role-row";
+          return `<div class="${cls}">
+            <span class="dot ${dot}"></span>
+            <span class="role-name">${r.name}</span>
+            <span class="role-status">${r.summary || "—"}</span>
+          </div>`;
+        }).join("");
+
+        const handoff = m.status === "awaiting_review" ? `
+          <div class="handoff">
+            <strong>Paused for handoff</strong> — review Backend Engineer artifact before starting Reviewer.<br />
+            ${m.assumptions ? m.assumptions + " assumption(s) logged · " : ""}Behavior: ${behaviorLabel(m.agentBehavior)}
+            <div class="handoff-actions">
+              <button type="button" class="primary">@lu next role</button>
+              <button type="button">View artifact</button>
+              <button type="button">Mission status</button>
+            </div>
+          </div>` : "";
+
+        return `<article class="mission">
+          <div class="mission-top">
+            <div class="mission-title">${m.name}</div>
+            <span class="badge ${badgeClass(m.status)}">${badgeLabel(m.status)}</span>
+          </div>
+          <div class="meta">
+            <span>${m.workspace}</span>
+            <span>${m.crew}</span>
+            ${m.ticket ? `<span>${m.ticket}</span>` : ""}
+            <span>${m.progress}%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${m.progress}%"></div></div>
+          <div class="roles">${rolesHtml}</div>
+          ${handoff}
+        </article>`;
+      }).join("");
+    }
+
+    function renderWorkspaces() {
+      document.getElementById("workspaces").innerHTML = DATA.workspaces.map(w =>
+        `<div class="list-item">
+          <span class="color-dot" style="background:${w.color}"></span>
+          <span style="flex:1;font-weight:500">${w.name}</span>
+          <span style="color:var(--muted)">${w.repos} repos · ${w.missions} missions</span>
+        </div>`
+      ).join("");
+    }
+
+    function renderCrews() {
+      document.getElementById("crews").innerHTML = DATA.crews.map(c =>
+        `<div class="crew-card">
+          <div class="crew-name">${c.name}</div>
+          <div class="crew-chain">${c.chain}</div>
+        </div>`
+      ).join("");
+    }
+
+    function renderTodos() {
+      document.getElementById("todos").innerHTML = DATA.todos.map(t => {
+        const p = t.priority === "high" ? "todo-priority-high" : t.priority === "med" ? "todo-priority-med" : "";
+        return `<div class="list-item">
+          <span class="${p}" style="font-size:10px;font-weight:700;width:28px">${t.priority.toUpperCase()}</span>
+          <span style="flex:1">${t.text}</span>
+        </div>`;
+      }).join("") + `<div style="margin-top:10px;font-size:11px;color:var(--muted)">+ 3 more in todos.md</div>`;
+    }
+
+    renderStats();
+    renderMissions();
+    renderWorkspaces();
+    renderCrews();
+    renderTodos();
+
+    document.getElementById("file-path").textContent = location.href.startsWith("file:")
+      ? location.href
+      : "file:///Users/lionelresnik/Projects/cursor-command-center-plugin/assets/dashboard-preview.html";
+  </script>
+</body>
+</html>

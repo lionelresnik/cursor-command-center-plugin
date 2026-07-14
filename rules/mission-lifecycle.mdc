@@ -1,0 +1,49 @@
+---
+description: "Multi-role mission lifecycle — when to create missions vs task files, graph updates, and handoff gates. Apply when user mentions missions, crews, roles, @lu next role, or complete role."
+alwaysApply: false
+---
+
+# Mission Lifecycle
+
+Missions are **optional**. Use them for crew-based multi-step work. Use `task-history/` for ad-hoc tickets and PR tracking.
+
+## When to create a mission
+
+Create a mission when:
+- User names a **crew** or multi-step workflow (implement → review → document)
+- Work spans **multiple sessions** with defined roles
+- User explicitly says `@lu new mission`
+
+Stay with task files only when:
+- Single-session fix or investigation
+- User is not using crews
+
+## File locations
+
+All under `~/.command-center/` — never in the workspace repo root.
+
+## Handoff gate
+
+When `handoffMode` is `manual` (default):
+- After `@lu complete role`, set mission `status` to `awaiting_review`
+- Do **not** auto-start the next role until user runs `@lu next role`
+
+## Behavior prefixes
+
+Parse from role output:
+
+| Prefix | agentBehavior | Action |
+|--------|---------------|--------|
+| `ASSUMPTION:` | assume_and_document | Append to docs (see assumption-capture) |
+| `QUESTION:` | ask_me | Wait for user reply in chat |
+| `ASYNC_QUESTION:` | async | Log in artifact; continue |
+
+## Link to task files
+
+If a task file exists for the same ticket, add `missionId` to task frontmatter when a mission is created.
+
+## After mission done
+
+- Offer to update related task file status
+- Offer `@lu dashboard` refresh
+- Offer standup-worthy summary line for next `@lu standup`

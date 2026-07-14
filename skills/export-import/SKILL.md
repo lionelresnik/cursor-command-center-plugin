@@ -15,7 +15,8 @@ When user asks to export or back up their setup:
 4. Read `todos.md` and `todos-archive.md` if they exist
 5. Read `standups/` directory if it exists
 6. Ask if they want to include knowledge base (task-history + docs + standups)
-7. Bundle into a JSON file:
+7. Include `roles/`, `crews/`, and `missions/` if those directories exist
+8. Bundle into a JSON file:
 
 ```json
 {
@@ -36,12 +37,15 @@ When user asks to export or back up their setup:
   "todos_archive": "... (raw markdown of todos-archive.md if exists) ...",
   "task_history": { ... },
   "docs": { ... },
-  "standups": { ... }
+  "standups": { ... },
+  "roles": { ... },
+  "crews": { ... },
+  "missions": { ... }
 }
 ```
 
-8. Save to `command-center-export-[date].json`
-9. Tell the user the file path
+9. Save to `command-center-export-[date].json`
+10. Tell the user the file path
 
 ## Import Configuration
 
@@ -57,7 +61,7 @@ When user provides an export file or asks to import/restore:
 5. Write `config.json`
 6. Restore `profile.json` (ask first: "Found a profile for [name] — restore it?")
 7. Restore `todos.md` (ask first: "Found [N] todos — restore them?")
-8. Optionally restore task-history, docs, and standups
+8. Optionally restore task-history, docs, standups, roles, crews, and missions
 9. Regenerate .code-workspace files
 10. Confirm what was imported
 

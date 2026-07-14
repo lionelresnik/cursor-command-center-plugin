@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command Center — Dashboard</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #181b24;
+      --border: #2a2f3a;
+      --text: #e8eaed;
+      --muted: #9aa0a6;
+      --accent: #6366f1;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --blue: #3b82f6;
+      --orange: #f97316;
+      --red: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    .banner {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 24px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .banner strong { color: var(--yellow); }
+    header {
+      padding: 24px 24px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    h1 { font-size: 1.5rem; font-weight: 700; }
+    .subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    button, .btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    button:hover { border-color: var(--accent); }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      padding: 0 24px 20px;
+    }
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .stat-value { font-size: 1.75rem; font-weight: 700; }
+    .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+      padding: 0 24px 32px;
+    }
+    @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } }
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .section-head {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .section-body { padding: 16px 18px; }
+    .mission {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .mission:last-child { margin-bottom: 0; }
+    .mission-top { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+    .mission-title { font-weight: 600; font-size: 14px; }
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .badge-review { background: #422006; color: var(--yellow); }
+    .badge-running { background: #172554; color: var(--blue); }
+    .badge-done { background: #14532d; color: var(--green); }
+    .badge-pending { background: #27272a; color: var(--muted); }
+    .meta { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+    .meta span { margin-right: 12px; }
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 999px; }
+    .roles { display: flex; flex-direction: column; gap: 6px; }
+    .role-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      padding: 8px 10px;
+      background: var(--bg);
+      border-radius: 8px;
+      border: 1px solid transparent;
+    }
+    .role-row.active { border-color: var(--yellow); background: #1c1910; }
+    .role-row.done { opacity: 0.85; }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .dot-done { background: var(--green); }
+    .dot-active { background: var(--yellow); }
+    .dot-pending { background: var(--border); }
+    .role-name { flex: 1; font-weight: 500; }
+    .role-status { color: var(--muted); font-size: 11px; }
+    .handoff {
+      margin-top: 12px;
+      padding: 12px;
+      background: #1c1910;
+      border: 1px solid #713f12;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+    .handoff strong { color: var(--yellow); }
+    .handoff-actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .sidebar-block { margin-bottom: 16px; }
+    .sidebar-block:last-child { margin-bottom: 0; }
+    .list-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .list-item:last-child { border-bottom: none; }
+    .color-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .todo-priority-high { color: var(--red); }
+    .todo-priority-med { color: var(--orange); }
+    .crew-card {
+      padding: 10px 12px;
+      background: var(--bg);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    .crew-card:last-child { margin-bottom: 0; }
+    .crew-name { font-weight: 600; margin-bottom: 4px; }
+    .crew-chain { color: var(--muted); font-size: 11px; }
+    footer {
+      padding: 16px 24px 24px;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    code { background: var(--bg); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <span>Generated from <code>~/.command-center/</code> · static · no server</span>
+    <span>Regenerate: <code>@lu dashboard</code></span>
+  </div>
+
+  <header>
+    <div>
+      <h1>Command Center</h1>
+      <p class="subtitle" id="subtitle"></p>
+    </div>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="layout">
+    <div>
+      <section>
+        <div class="section-head">
+          <span>Missions</span>
+          <span id="missions-meta" style="color: var(--muted); font-weight: 400;"></span>
+        </div>
+        <div class="section-body" id="missions"></div>
+      </section>
+    </div>
+
+    <div>
+      <section style="margin-bottom: 16px;">
+        <div class="section-head">Workspaces</div>
+        <div class="section-body" id="workspaces"></div>
+      </section>
+      <section style="margin-bottom: 16px;">
+        <div class="section-head">Crews</div>
+        <div class="section-body" id="crews"></div>
+      </section>
+      <section>
+        <div class="section-head">Todos</div>
+        <div class="section-body" id="todos"></div>
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    Open in Cursor: <code>Cmd+Shift+P → Simple Browser: Show</code> → paste the file URL below.<br />
+    File: <code id="file-path"></code>
+  </footer>
+
+  <script>
+    const DATA = /*__DATA__*/;
+
+    function esc(s) {
+      return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+
+    function badgeClass(status) {
+      if (status === "awaiting_review") return "badge-review";
+      if (status === "running") return "badge-running";
+      if (status === "done") return "badge-done";
+      return "badge-pending";
+    }
+
+    function badgeLabel(status) {
+      if (status === "awaiting_review") return "Awaiting review";
+      if (status === "running") return "Running";
+      if (status === "done") return "Done";
+      return status;
+    }
+
+    function behaviorLabel(b) {
+      return { ask_me: "Ask me", assume_and_document: "Assume & document", async: "Async questions" }[b] || b;
+    }
+
+    function renderHeader() {
+      const name = DATA.user?.name ? esc(DATA.user.name) : "there";
+      document.getElementById("subtitle").innerHTML =
+        `Hello, <strong>${name}</strong> · workspace: <strong>${esc(DATA.workspace)}</strong> · updated ${esc(DATA.generatedAt)}`;
+      const s = DATA.stats || {};
+      document.getElementById("missions-meta").textContent =
+        `${s.activeMissions ?? 0} active · ${s.awaitingReview ?? 0} awaiting review`;
+    }
+
+    function renderStats() {
+      const s = DATA.stats;
+      document.getElementById("stats").innerHTML = [
+        { v: s.activeMissions, l: "Active missions" },
+        { v: s.awaitingReview, l: "Awaiting review" },
+        { v: s.openTodos, l: "Open todos" },
+        { v: s.workspaces, l: "Workspaces" },
+      ].map(x => `<div class="stat"><div class="stat-value">${x.v}</div><div class="stat-label">${x.l}</div></div>`).join("");
+    }
+
+    function renderMissions() {
+      const missions = DATA.missions || [];
+      if (missions.length === 0) {
+        document.getElementById("missions").innerHTML =
+          '<p style="color:var(--muted);font-size:13px">No missions yet. Run <code>@lu init missions</code> then <code>@lu new mission</code>.</p>';
+        return;
+      }
+      const active = missions.filter(m => m.status !== "done");
+      const done = missions.filter(m => m.status === "done").slice(0, 3);
+      const list = [...active, ...done];
+
+      document.getElementById("missions").innerHTML = list.map(m => {
+        const roles = m.roles || [];
+        const rolesHtml = roles.map(r => {
+          const st = r.status === "running" ? "active" : r.status;
+          const dot = st === "done" ? "dot-done" : st === "active" ? "dot-active" : "dot-pending";
+          const cls = st === "active" ? "role-row active" : st === "done" ? "role-row done" : "role-row";
+          return `<div class="${cls}">
+            <span class="dot ${dot}"></span>
+            <span class="role-name">${esc(r.name)}</span>
+            <span class="role-status">${esc(r.summary || "—")}</span>
+          </div>`;
+        }).join("");
+
+        const nextRole = roles.find(r => r.status === "pending" || r.status === "active");
+        const handoff = m.status === "awaiting_review" ? `
+          <div class="handoff">
+            <strong>Paused for handoff</strong> — review the last artifact before ${esc(nextRole?.name || "next role")}.<br />
+            Behavior: ${esc(behaviorLabel(m.agentBehavior))} · Handoff: ${esc(m.handoffMode || "manual")}
+            <div class="handoff-actions">
+              <span style="font-size:11px;color:var(--muted)">In chat: <code>@lu next role</code></span>
+            </div>
+          </div>` : "";
+
+        return `<article class="mission">
+          <div class="mission-top">
+            <div class="mission-title">${esc(m.name)}</div>
+            <span class="badge ${badgeClass(m.status)}">${badgeLabel(m.status)}</span>
+          </div>
+          <div class="meta">
+            <span>${esc(m.workspace)}</span>
+            <span>${esc(m.crew)}</span>
+            ${m.ticket ? `<span>${esc(m.ticket)}</span>` : ""}
+            <span>${m.progress ?? 0}%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${m.progress ?? 0}%"></div></div>
+          <div class="roles">${rolesHtml}</div>
+          ${handoff}
+        </article>`;
+      }).join("");
+    }
+
+    function renderWorkspaces() {
+      const ws = DATA.workspaces || [];
+      document.getElementById("workspaces").innerHTML = ws.length ? ws.map(w =>
+        `<div class="list-item">
+          <span class="color-dot" style="background:${w.color}"></span>
+          <span style="flex:1;font-weight:500">${esc(w.name)}</span>
+          <span style="color:var(--muted)">${w.repos} repos · ${w.missions} active</span>
+        </div>`
+      ).join("") : '<p style="color:var(--muted);font-size:12px">No workspaces configured.</p>';
+    }
+
+    function renderCrews() {
+      const crews = DATA.crews || [];
+      document.getElementById("crews").innerHTML = crews.length ? crews.map(c =>
+        `<div class="crew-card">
+          <div class="crew-name">${esc(c.name)}</div>
+          <div class="crew-chain">${esc(c.chain)}</div>
+        </div>`
+      ).join("") : '<p style="color:var(--muted);font-size:12px">Run <code>@lu init missions</code> to seed crews.</p>';
+    }
+
+    function renderTodos() {
+      const c = DATA.todos?.counts || DATA.todos || {};
+      if (Array.isArray(DATA.todos)) {
+        document.getElementById("todos").innerHTML = DATA.todos.map(t => {
+          const p = t.priority === "high" ? "todo-priority-high" : t.priority === "med" ? "todo-priority-med" : "";
+          return `<div class="list-item">
+            <span class="${p}" style="font-size:10px;font-weight:700;width:28px">${esc(String(t.priority || "").toUpperCase())}</span>
+            <span style="flex:1">${esc(t.text)}</span>
+          </div>`;
+        }).join("");
+        return;
+      }
+      document.getElementById("todos").innerHTML = `
+        <div class="list-item"><span style="flex:1">In progress</span><span>${c.in_progress ?? 0}</span></div>
+        <div class="list-item"><span style="flex:1">Pending</span><span>${c.pending ?? 0}</span></div>
+        <div class="list-item"><span style="flex:1">Done (in file)</span><span>${c.done ?? 0}</span></div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted)">See <code>@lu todos</code> for full list</div>`;
+    }
+
+    renderHeader();
+    renderStats();
+    renderMissions();
+    renderWorkspaces();
+    renderCrews();
+    renderTodos();
+
+    document.getElementById("file-path").textContent = location.href;
+  </script>
+</body>
+</html>
