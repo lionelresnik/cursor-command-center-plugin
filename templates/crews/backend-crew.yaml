@@ -1,0 +1,10 @@
+id: backend-crew
+name: Backend Crew
+description: Implement, review, and document backend work
+members:
+  - roleId: backend-engineer
+    order: 1
+  - roleId: reviewer
+    order: 2
+  - roleId: tech-writer
+    order: 3

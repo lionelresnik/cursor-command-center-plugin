@@ -1,0 +1,6 @@
+id: docs-crew
+name: Docs Crew
+description: Research and document a topic
+members:
+  - roleId: tech-writer
+    order: 1
