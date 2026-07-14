@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+"""Command Center CLI dispatcher.
+
+Deterministic operations the agent calls instead of hand-editing files.
+
+Usage:
+  cc todo add "Fix auth" --workspace platform --priority high --ticket AUTH-1
+  cc todo done 3
+  cc todo list --status pending --json
+  cc todo migrate
+"""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+
+def main(argv: list[str]) -> int:
+    if not argv:
+        print(__doc__)
+        return 1
+    group, rest = argv[0], argv[1:]
+    if group == "todo":
+        import cc_todos
+        return cc_todos.main(rest)
+    print(f"Unknown command group: {group}\n{__doc__}", file=sys.stderr)
+    return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

@@ -1,6 +1,6 @@
 ---
-description: "Append a one-line summary to today's daily log after every substantive response. Lightweight work tracking for accurate standup generation."
-alwaysApply: true
+description: "Append a one-line summary to today's daily log after substantive work (code changes, investigations, task/PR updates, workspace ops). Trigger after completing meaningful work in a turn. Lightweight timeline for standup generation."
+alwaysApply: false
 ---
 
 # Daily Work Log

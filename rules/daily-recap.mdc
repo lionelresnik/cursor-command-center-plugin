@@ -1,6 +1,6 @@
 ---
-description: "Time-aware greetings and work recaps when returning after idle. Reads cc-context.json (written by session-start hook) to provide context on what was done and what's next."
-alwaysApply: true
+description: "Time-aware greeting and work recap at the start of a session or when the user returns after idle. Trigger at the first message of a session, on greetings (hi/hello/morning), or when the user asks where they left off. Reads ~/.command-center/cc-context.json."
+alwaysApply: false
 ---
 
 ## Session Greeting

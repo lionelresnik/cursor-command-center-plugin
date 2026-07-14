@@ -29,7 +29,8 @@ else
 fi
 
 chmod +x "$PLUGIN_DIR"/scripts/*.sh 2>/dev/null || true
-chmod +x "$PLUGIN_DIR"/scripts/cc_session.py "$PLUGIN_DIR"/scripts/cc_lock.py 2>/dev/null || true
+chmod +x "$PLUGIN_DIR"/scripts/cc "$PLUGIN_DIR"/scripts/cc_session.py \
+         "$PLUGIN_DIR"/scripts/cc_lock.py "$PLUGIN_DIR"/scripts/cc_todos.py 2>/dev/null || true
 chmod +x "$PLUGIN_DIR"/scripts/generate-dashboard.py 2>/dev/null || true
 
 echo "→ Seeding mission roles, crews, and dashboard tools…"

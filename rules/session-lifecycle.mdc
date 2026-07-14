@@ -1,0 +1,14 @@
+---
+description: "Thin always-on dispatcher that ensures session lifecycle behaviors fire. Points to detailed triggered rules; keeps per-turn token cost minimal."
+alwaysApply: true
+---
+
+# Session Lifecycle (dispatcher)
+
+Keep this minimal — detail lives in the triggered rules referenced below.
+
+- **Session start / greeting:** On the first message of a session or any greeting, read `~/.command-center/cc-context.json` and greet per `daily-recap`. If no `~/.command-center/profile.json` exists, follow `personalization` to ask the user's name.
+- **After substantive work:** Append a one-line entry to today's daily log per `daily-log` (code changes, investigations, task/PR updates, workspace ops). Skip for trivial replies.
+- **Context pressure / workspace switch / goodbye:** Preserve in-progress state per `context-preservation`.
+
+Do not restate these rules' contents here; invoke them when their trigger applies.

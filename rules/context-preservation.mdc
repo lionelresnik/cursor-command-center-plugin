@@ -1,6 +1,6 @@
 ---
-description: "Preserve in-progress findings and state before context window fills up, workspace switches, or session ends. Saves current status, open questions, and what was tried so the next session can resume without losing work."
-alwaysApply: true
+description: "Preserve in-progress findings before the context window fills, on workspace switch, on 'start fresh', or at end of a long investigation. Trigger when the conversation runs long, the user switches workspace/project, says start over or goodbye, or finishes a multi-step investigation worth keeping."
+alwaysApply: false
 ---
 
 # Context Preservation

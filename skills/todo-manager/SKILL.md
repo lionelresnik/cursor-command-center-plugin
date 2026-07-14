@@ -1,46 +1,43 @@
 ---
 name: todo-manager
-description: Manage a persistent todo list across workspaces and sessions. Add, complete, prioritize, and query todos. Stores in ~/.command-center/todos.md. Use when the user asks about tasks, what's next, what's done, or wants to track work items.
+description: Manage a persistent todo list across workspaces and sessions. Add, complete, prioritize, and query todos via the `cc todo` CLI. Use when the user asks about tasks, what's next, what's done, or wants to track work items.
 ---
 
 # Todo Manager
 
-## Storage
+## Storage — use the `cc todo` CLI, never hand-edit files
 
-All todos are stored in `~/.command-center/todos.md` as a markdown file with this format:
+Source of truth is **`~/.command-center/todos.json`**. A human-readable **`~/.command-center/todos.md`** is regenerated automatically on every mutation. **Do not edit either file directly** — call the CLI. It handles IDs, ordering, locking, dates, and the markdown view for you.
 
-### Concurrent writes (multi-window)
-
-If multiple Cursor windows may edit todos at once, use the lock helper before writing:
+The CLI lives in the plugin's `scripts/` directory. Invoke it via python3:
 
 ```bash
-# Shell one-liner with lock held for the command
-python3 scripts/cc_lock.py wrap todos -- cp todos.md.bak ~/.command-center/todos.md
-
-# Or atomic write from stdin
-python3 scripts/cc_lock.py write todos ~/.command-center/todos.md <<'EOF'
-...full file content...
-EOF
+python3 "$CC_PLUGIN/scripts/cc" todo <command>
+# $CC_PLUGIN = ~/.cursor/plugins/local/command-center
 ```
 
-Lock files live in `~/.command-center/locks/`. Without a lock, last write wins.
+### Commands
 
-```markdown
-# Todos
+| Intent | Command |
+|--------|---------|
+| Add | `cc todo add "Fix auth" --workspace platform --priority high --ticket AUTH-123 --source user` |
+| Lucius-detected add | `cc todo add "Repo behind main" --workspace platform --source lucius` |
+| Mark done | `cc todo done <id>` |
+| Start (→ in progress) | `cc todo start <id>` |
+| Reopen (→ pending) | `cc todo reopen <id>` |
+| Remove | `cc todo rm <id>` |
+| Change priority | `cc todo priority <id> high` |
+| List all | `cc todo list --json` |
+| Filter | `cc todo list --status pending --workspace platform --ticket AUTH-123 --json` |
+| Archive old done | `cc todo cleanup --days 30` |
 
-## In Progress
-- [ ] **[workspace]** Task description `#priority-high` `#TICKET-123` `#user`
-- [ ] **[workspace]** Another task `#priority-medium` `#lucius`
+**Always pass `--json`** when you need to read results — parse the JSON, then present it to the user in the display format below. Never parse `todos.md`.
 
-## Pending
-- [ ] **[backend]** Implement retry logic for API calls `#priority-high` `#ABC-456` `#user`
-- [ ] **[frontend]** Fix responsive layout on mobile `#priority-medium` `#lucius`
-- [ ] **[shared]** Update deployment docs `#priority-low` `#user`
+`add` prints the created todo (including its `id`) as JSON. Use that `id` for follow-up `done`/`start`/`rm`.
 
-## Done
-- [x] **[backend]** Add health check endpoint _(completed 2025-02-18)_ `#ABC-456` `#user`
-- [x] **[platform]** Fix auth token refresh _(completed 2025-02-17)_ `#lucius`
-```
+Priorities: `high` \| `medium` \| `low` (default `medium`). Statuses: `pending` \| `in_progress` \| `done`.
+
+Concurrency and the markdown view are handled by the CLI (atomic write + `~/.command-center/locks/`). You never manage locks yourself for todos.
 
 ### Ticket/Task Tagging
 
@@ -71,53 +68,44 @@ For `#user` todos, always **ask** before marking done: "Looks like [task] might 
 
 ### Add a todo
 When the user says "add todo", "remind me to", "I need to", "don't forget":
-1. Detect the workspace using these methods (in order):
-   - Check `~/.command-center/cc-context.json` for `"workspace"` field
-   - Check the open `.code-workspace` filename (e.g., `platform.code-workspace` → workspace is `platform`)
-   - Ask the user
-   - **Never default to "shared"** unless the user explicitly says the todo spans multiple workspaces
-2. Detect ticket ID from context:
-   - Check if user is working on a task file (e.g., `task-history/backend/PROJ-123-auth-retry-fix.md`)
-   - Check task file frontmatter for `ticket:` field
-   - Check if user mentions a ticket in the todo request
-   - If found, add `#TICKET-ID` tag
-   - If no ticket, skip this tag
-3. Ask priority if not obvious (high/medium/low, default: medium)
-4. Tag as `#user`
-5. Add to the Pending section of `~/.command-center/todos.md`
-6. Confirm: "Added to your list: [task] ([workspace], priority: [level], ticket: [TICKET-ID])"
+1. Detect the workspace (in order): `~/.command-center/cc-context.json` `"workspace"` field → open `.code-workspace` filename → ask. **Never default to "shared"** unless the todo explicitly spans workspaces.
+2. Detect ticket ID from context (task file being worked on, task frontmatter `ticket:`, or the user's message). Skip if none.
+3. Ask priority if not obvious (default medium).
+4. Run: `cc todo add "<text>" --workspace <ws> --priority <p> [--ticket <T>] --source user`
+5. Confirm from the returned JSON: "Added (#<id>): [task] ([workspace], [priority][, ticket])."
 
 ### Lucius-initiated todo
 When Lucius detects something that needs attention:
-1. Tag as `#lucius`
-2. Add to Pending with appropriate priority
-3. Tell the user: "I added a todo: [task] — I noticed [reason]"
+1. Run: `cc todo add "<text>" --workspace <ws> --priority <p> --source lucius`
+2. Tell the user: "I added a todo (#<id>): [task] — I noticed [reason]."
 
 ### Complete a todo
 When the user says "done with", "finished", "completed", "mark as done":
-1. Move from In Progress/Pending to Done section
-2. Add completion date
-3. Confirm: "Marked as done: [task]"
+1. Resolve the todo id (`cc todo list --json`, match by text/ticket).
+2. Run: `cc todo done <id>`
+3. Confirm: "Marked done (#<id>): [task]."
 
 ### Start working on a todo
 When the user says "working on", "starting", "picking up":
-1. Move from Pending to In Progress
-2. Confirm: "Moved to in progress: [task]"
+1. Resolve the id, then run: `cc todo start <id>`
+2. Confirm: "In progress (#<id>): [task]."
 
 ### Query todos
-- **"What's next?"** → Show highest priority pending item
-- **"What am I working on?"** → Show In Progress items
-- **"What's done?"** → Show recent Done items
-- **"What's left?"** / **"What still needs to be done?"** → Show Pending + In Progress counts and list
-- **"Have I forgotten something?"** → Show all pending items, highlight any older than 7 days
-- **"Show all todos"** → Full list grouped by status
-- **"Show todos for [workspace]"** → Filter by workspace
-- **"What's left for [TICKET-ID]?"** / **"Show todos for [TICKET-ID]"** → Filter by ticket ID
-- **"What tickets do I have todos for?"** → List all unique ticket IDs with todo counts
+Always query via `cc todo list ... --json`, then present. Never read `todos.md`.
+
+- **"What's next?"** → `cc todo list --status pending --json` → show top (list is priority-sorted)
+- **"What am I working on?"** → `cc todo list --status in_progress --json`
+- **"What's done?"** → `cc todo list --status done --json` → show recent
+- **"What's left?"** → `cc todo list --json` → Pending + In Progress counts and list
+- **"Have I forgotten something?"** → `cc todo list --status pending --json` → highlight items with old `createdAt`
+- **"Show all todos"** → `cc todo list --json` grouped by status
+- **"Show todos for [workspace]"** → `cc todo list --workspace <ws> --json`
+- **"What's left for [TICKET-ID]?"** → `cc todo list --ticket <T> --json`
+- **"What tickets do I have todos for?"** → `cc todo list --json`, collect unique `ticket` values
 
 ### Display format (chat)
 
-When displaying todos in chat (e.g., "what's next?", "what's left?", "show all todos"), use this Confluence-like format. Do **not** change the storage format in `todos.md` — only how todos are presented in the response:
+When displaying todos in chat, use this Confluence-like format. This is **presentation only** — the storage (`todos.json`) and the generated `todos.md` are managed by the CLI:
 
 ```markdown
 ## Your Todos
@@ -149,11 +137,11 @@ When filtering by ticket (e.g., "what's left for PROJ-123?"), show:
 ```
 
 ### Prioritize
-- **"This is urgent"** → Set priority-high
-- **"Reprioritize"** → Show all pending, ask user to reorder
+- **"This is urgent"** → `cc todo priority <id> high`
+- **"Reprioritize"** → `cc todo list --json`, show pending, then `cc todo priority <id> <level>` per change.
 
 ### Clean up
-- **"Clean up done items"** → Archive Done items older than 30 days to `~/.command-center/todos-archive.md`
+- **"Clean up done items"** → `cc todo cleanup --days 30` (archives to `~/.command-center/todos-archive.md`)
 
 ## Cross-Workspace View
 

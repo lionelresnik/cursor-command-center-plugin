@@ -2,6 +2,21 @@
 
 All notable changes to the Command Center Cursor plugin.
 
+## [0.3.0] — 2026-07-14
+
+### Changed (architecture)
+- **Todos now use a deterministic CLI + JSON store.** `~/.command-center/todos.json` is the source of truth; `todos.md` is regenerated as a human-readable view. The agent calls `cc todo` instead of hand-editing markdown — atomic, cheaper on tokens, no dropped/reordered items.
+- **`scripts/cc`** dispatcher added (`cc todo add|done|start|reopen|priority|rm|list|render|migrate|cleanup`).
+- **Legacy `todos.md` auto-migrates** to JSON on first CLI use.
+- **`todo-manager` skill** rewritten to call the CLI and parse `--json`.
+
+### Changed (token efficiency)
+- Demoted 4 always-on rules (`daily-recap`, `daily-log`, `context-preservation`, `personalization`) to `alwaysApply: false` with sharp trigger descriptions.
+- Added thin always-on `session-lifecycle` dispatcher (~15 lines) so greeting, logging, and context-preservation still fire — net always-on rule tokens cut ~80%.
+
+### Added
+- `tests/test_cc_todos.py` — 18 cases (mutations, filters, ordering, markdown migration/render, cleanup, CLI)
+
 ## [0.2.3] — 2026-07-14
 
 ### Fixed

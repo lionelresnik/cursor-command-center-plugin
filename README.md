@@ -8,7 +8,7 @@ A Cursor plugin that brings order to multi-repo chaos. Workspace management, tas
 
 <p align="center">
   <img src="https://img.shields.io/badge/Marketplace-coming_soon-orange?style=flat" alt="Marketplace coming soon">
-  <img src="https://img.shields.io/badge/version-0.2.3-blue?style=flat" alt="Version 0.2.3">
+  <img src="https://img.shields.io/badge/version-0.3.0-blue?style=flat" alt="Version 0.3.0">
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat" alt="MIT License">
 </p>
 
@@ -19,6 +19,12 @@ https://github.com/user-attachments/assets/ad786927-1b77-4bfc-8490-0ca37b224341
 </p>
 
 ---
+
+## What's New in v0.3.0
+
+- **Deterministic todo store** — `cc todo` CLI + `todos.json` source of truth; `todos.md` is now a generated view. Faster, token-cheap, no dropped items. Existing `todos.md` auto-migrates.
+- **~80% fewer always-on rule tokens** — heavy lifecycle rules are now trigger-scoped, with a thin `session-lifecycle` dispatcher keeping greeting/logging intact.
+- **18 new tests** for the todo store.
 
 ## What's New in v0.2.3
 
@@ -427,7 +433,8 @@ All Command Center data lives in `~/.command-center/`:
 | `docs/[workspace]/_index.md` | Optional doc index (title + summary per file) |
 | `standups/` | Daily and weekly standup summaries |
 | `daily-log/` | Session work logs (when used) |
-| `todos.md` | Persistent todo list across all workspaces |
+| `todos.json` | Persistent todo list — **source of truth** (managed by `cc todo`) |
+| `todos.md` | Human-readable todo view — **generated** from `todos.json`; do not hand-edit |
 | `cc-context.json` | Session context (workspace, idle hours, todos counts) — written by session-start hook |
 | `cc-last-pr.txt` | Temp PR URL from shell hook (cleared on session end) |
 | `locks/` | File locks for concurrent todo/mission writes |
@@ -492,6 +499,8 @@ command-center/
 ├── hooks/
 │   └── hooks.json
 └── scripts/
+    ├── cc                      # CLI dispatcher (cc todo ...)
+    ├── cc_todos.py             # Todo store (JSON source of truth + md view)
     ├── cc_session.py           # Session hooks (JSON-safe)
     ├── cc_lock.py              # File locking for todos/missions
     ├── session-start.sh

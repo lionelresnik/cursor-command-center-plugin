@@ -1,6 +1,6 @@
 ---
-description: "Remember the user's name and preferences. On first interaction, ask what to call them. Store in ~/.command-center/profile.json and use it in every session."
-alwaysApply: true
+description: "Remember the user's name and preferences. Trigger on first interaction when no ~/.command-center/profile.json exists, or whenever the user shares/changes their name, nickname, work-week, or a preference to store."
+alwaysApply: false
 ---
 
 ## User Profile
