@@ -32,7 +32,8 @@ https://github.com/user-attachments/assets/ad786927-1b77-4bfc-8490-0ca37b224341
 | **Standups** | Daily and weekly standup summaries from todos and task history |
 | **Daily Recap** | Time-aware greetings, session recaps, and standup prompts |
 | **Personalization** | Remembers your name, preferences, and work schedule across sessions |
-| **Export/Import** | Backup and restore everything — workspaces, todos, profile, history |
+| **Export/Import** | Backup and restore everything — workspaces, todos, profile, history, missions |
+| **Missions & crews** | Multi-role missions with manual handoffs, behavior modes, static dashboard |
 | **Cross-Repo Context** | `@Codebase` searches all repos in your workspace at once |
 
 <p align="center">
@@ -69,6 +70,10 @@ Lucius is your Command Center AI assistant. Type `@lucius` or `@lu` in chat and 
 @lu have I forgotten something?
 @lu standup
 @lucius weekly recap
+@lu init missions
+@lu new mission "Fix auth bug" crew:backend-crew
+@lu next role
+@lu dashboard
 ```
 
 Lucius remembers your name and work schedule, greets you based on time of day, recaps what you were working on, and offers standup summaries at the start of each day or week.
@@ -203,6 +208,10 @@ All Command Center data lives in `~/.command-center/`:
 | `docs/` | Reference guides organized by workspace |
 | `standups/` | Daily and weekly standup summaries |
 | `todos.md` | Persistent todo list across all workspaces |
+| `roles/` | Mission role prompts |
+| `crews/` | Ordered role lists for crews |
+| `missions/` | Mission JSON, artifacts, checkpoints |
+| `dashboard/index.html` | Generated static board (`@lu dashboard`) |
 | `profile.json` | Your name and preferences |
 | `session-state.json` | Last session timestamp for recap detection |
 
@@ -218,6 +227,8 @@ command-center/
 │   ├── naming-conventions.mdc
 │   ├── personalization.mdc   # Name, preferences, work schedule
 │   ├── daily-recap.mdc       # Greetings, recaps & standup prompts
+│   ├── mission-lifecycle.mdc # Mission vs task files, handoffs
+│   ├── assumption-capture.mdc # ASSUMPTION lines from missions
 │   └── easter-egg.mdc        # The Fox Protocol
 ├── skills/                   # Agent capabilities
 │   ├── workspace-manager/    # Create/manage workspaces
@@ -225,7 +236,11 @@ command-center/
 │   ├── repo-status/          # Git status + auto-pull
 │   ├── todo-manager/         # Persistent todo list
 │   ├── standup-generator/    # Daily/weekly standup summaries
+│   ├── mission-manager/      # Missions, crews, roles
 │   └── export-import/        # Backup/restore
+├── templates/                # Default roles & crews (seed on init)
+│   ├── roles/
+│   └── crews/
 ├── agents/                   # Meet Lucius
 │   ├── lucius.md             # Main agent — @lucius
 │   └── lu.md                 # Quick alias — @lu
@@ -234,17 +249,24 @@ command-center/
 │   ├── setup-workspace.md
 │   ├── check-status.md
 │   ├── todos.md
-│   └── standup.md            # Daily/weekly standups
+│   ├── standup.md            # Daily/weekly standups
+│   ├── mission.md            # Mission status & crews
+│   └── dashboard.md          # Static mission board
 ├── assets/                   # Static assets
 │   ├── logo.svg              # Plugin logo
 │   ├── overview.png          # Feature overview screenshot
+│   ├── dashboard-preview.html # Mock dashboard demo
+│   ├── dashboard-template.html # Generator template
 │   └── easter-egg-art.md     # ASCII art for The Fox Protocol
 ├── hooks/                    # Event automation
 │   └── hooks.json
 └── scripts/                  # Hook implementations
     ├── session-start.sh
     ├── session-end.sh
-    └── after-shell-execution.sh
+    ├── after-shell-execution.sh
+    ├── generate-dashboard.py
+    ├── generate-dashboard.sh
+    └── install-mission-tools.sh
 ```
 
 ---

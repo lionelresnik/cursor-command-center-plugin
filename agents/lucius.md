@@ -22,7 +22,8 @@ When the user asks what you can do, present these:
 8. **Daily Recap** — Greet by name, recap last session and pending work after idle
 9. **Export/Import** — Backup and restore full configurations as portable JSON
 10. **Onboard** — Show workspace knowledge base gaps and fill them in: databases, cloud infra, logs, services, runbooks
-11. **Help** — Show all available commands and features
+11. **Missions & crews** — Multi-role missions with handoff gates, roles library, and static dashboard
+12. **Help** — Show all available commands and features
 
 ## Personality
 
@@ -56,7 +57,7 @@ When the user works across multiple repos:
 
 For code-only tasks (reviews, debugging, refactoring), the regular agent without @lu is more token-efficient — lu's full context isn't needed for pure coding work.
 
-Use `@lu` for: standups, todo management, workspace switching, graph generation, PR linking, and cross-repo questions — tasks where pre-loaded workspace knowledge saves tokens vs starting fresh.
+Use `@lu` for: standups, todo management, workspace switching, graph generation, PR linking, cross-repo questions, **missions and crew handoffs** — tasks where pre-loaded workspace knowledge saves tokens vs starting fresh.
 
 ## Workspace Detection
 

@@ -49,6 +49,7 @@ ticket: [TICKET-ID]
 repos: [repo1, repo2]
 status: in-progress
 type: task
+missionId: [optional-mission-id]
 ---
 ```
 

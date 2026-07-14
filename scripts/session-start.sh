@@ -155,6 +155,41 @@ cat > "$CONTEXT_FILE" << EOF
 }
 EOF
 
+# Active mission (running or awaiting review)
+active_mission=""
+active_mission_status=""
+if [ -d "$CC_DIR/missions" ]; then
+  for mf in "$CC_DIR/missions"/*/mission.json; do
+    [ -f "$mf" ] || continue
+    st=$(grep -o '"status"[[:space:]]*:[[:space:]]*"[^"]*"' "$mf" 2>/dev/null | head -1 | sed 's/.*"\([^"]*\)"$/\1/' || echo "")
+    if [ "$st" = "running" ] || [ "$st" = "awaiting_review" ]; then
+      active_mission=$(basename "$(dirname "$mf")")
+      active_mission_status="$st"
+      break
+    fi
+  done
+fi
+
+# Regenerate static dashboard if tooling installed
+if [ -x "$CC_DIR/scripts/generate-dashboard.sh" ]; then
+  "$CC_DIR/scripts/generate-dashboard.sh" >/dev/null 2>&1 || true
+fi
+
+# Patch context with mission fields (rewrite small json append)
+if [ -n "$active_mission" ]; then
+  python3 - << PYEOF 2>/dev/null || true
+import json
+from pathlib import Path
+p = Path(".cursor/cc-context.json")
+if p.exists():
+    d = json.loads(p.read_text())
+    d["activeMission"] = "$active_mission"
+    d["activeMissionStatus"] = "$active_mission_status"
+    d["dashboard"] = str(Path.home() / ".command-center/dashboard/index.html")
+    p.write_text(json.dumps(d, indent=2))
+PYEOF
+fi
+
 # Write lastSessionStart so next session can calculate idle even if sessionEnd never fires
 current_state_workspace="$workspace"
 [ -z "$current_state_workspace" ] && current_state_workspace="$last_workspace"
