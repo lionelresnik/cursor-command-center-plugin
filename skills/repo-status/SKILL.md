@@ -14,7 +14,7 @@ Runs `git status` across all repos in a workspace (or all workspaces) and summar
 When user asks to check repo status:
 
 1. Identify workspace(s) using these methods (in order):
-   - Check `.cursor/cc-context.json` for `"workspace"` field
+   - Check `~/.command-center/cc-context.json` for `"workspace"` field
    - Check the open `.code-workspace` filename (e.g., `backend.code-workspace` → workspace is `backend`)
    - Ask the user
 2. Read repo paths from `~/.command-center/contexts/[workspace].repos`

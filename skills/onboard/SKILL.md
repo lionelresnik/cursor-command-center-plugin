@@ -21,7 +21,7 @@ This skill is the **inventory view** and optional **gap filler**.
 
 ### Step 1: Resolve Workspace
 
-Read `~/.command-center/.cursor/cc-context.json` for the `"workspace"` field.
+Read `~/.command-center/cc-context.json` for the `"workspace"` field.
 If not found, use the workspace name provided by the user (e.g., `@lu onboard backend` → workspace is `backend`).
 
 ### Step 2: Read Existing Docs

@@ -182,7 +182,7 @@ If you don't have enough context about what the issue was, read the task file to
 
 ## Auto-Prompt Rules
 
-When `isNewDay: true` in `.cursor/cc-context.json`:
+When `isNewDay: true` in `~/.command-center/cc-context.json`:
 - Mention: "Want me to generate today's standup?"
 - Don't auto-generate — always ask first
 

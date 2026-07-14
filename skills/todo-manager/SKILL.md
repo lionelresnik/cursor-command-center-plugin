@@ -9,6 +9,22 @@ description: Manage a persistent todo list across workspaces and sessions. Add, 
 
 All todos are stored in `~/.command-center/todos.md` as a markdown file with this format:
 
+### Concurrent writes (multi-window)
+
+If multiple Cursor windows may edit todos at once, use the lock helper before writing:
+
+```bash
+# Shell one-liner with lock held for the command
+python3 scripts/cc_lock.py wrap todos -- cp todos.md.bak ~/.command-center/todos.md
+
+# Or atomic write from stdin
+python3 scripts/cc_lock.py write todos ~/.command-center/todos.md <<'EOF'
+...full file content...
+EOF
+```
+
+Lock files live in `~/.command-center/locks/`. Without a lock, last write wins.
+
 ```markdown
 # Todos
 
@@ -56,7 +72,7 @@ For `#user` todos, always **ask** before marking done: "Looks like [task] might 
 ### Add a todo
 When the user says "add todo", "remind me to", "I need to", "don't forget":
 1. Detect the workspace using these methods (in order):
-   - Check `.cursor/cc-context.json` for `"workspace"` field
+   - Check `~/.command-center/cc-context.json` for `"workspace"` field
    - Check the open `.code-workspace` filename (e.g., `platform.code-workspace` → workspace is `platform`)
    - Ask the user
    - **Never default to "shared"** unless the user explicitly says the todo spans multiple workspaces

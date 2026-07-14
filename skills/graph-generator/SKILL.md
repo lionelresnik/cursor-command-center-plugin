@@ -26,7 +26,7 @@ Generates a Mermaid architecture diagram showing how repos in a workspace depend
 When user asks for an architecture graph:
 
 1. Identify the workspace using these methods (in order):
-   - Check `.cursor/cc-context.json` for `"workspace"` field
+   - Check `~/.command-center/cc-context.json` for `"workspace"` field
    - Check the open `.code-workspace` filename (e.g., `platform.code-workspace` → workspace is `platform`)
    - Ask the user
 2. Read the repo list from `~/.command-center/contexts/[workspace].repos`

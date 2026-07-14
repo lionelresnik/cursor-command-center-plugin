@@ -1,23 +1,7 @@
 #!/usr/bin/env bash
+# Detect PR URLs from shell output (after gh pr create / git push).
 set -euo pipefail
-
-# Detect PR creation from shell output.
-# Triggered after `gh pr create` or `git push` commands.
-# Extracts PR URL if found and writes it to a temp file
-# for the agent to pick up and add to the task file.
-
-PR_DETECT_FILE=".cursor/cc-last-pr.txt"
-
-# Read stdin (shell command output) if available
-output=""
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [ ! -t 0 ]; then
-    output=$(cat)
-fi
-
-# Look for GitHub PR URL in output
-pr_url=$(echo "$output" | grep -oE 'https://github.com/[^[:space:]]+/pull/[0-9]+' | head -1 || true)
-
-if [ -n "$pr_url" ]; then
-    mkdir -p .cursor
-    echo "$pr_url" > "$PR_DETECT_FILE"
+  python3 "$SCRIPT_DIR/cc_session.py" capture-pr
 fi

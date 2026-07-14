@@ -21,7 +21,7 @@ If no ticket found, create the task file without a ticket prefix — that's fine
 
 ## Step 2: Identify the Workspace
 
-1. Read `~/.command-center/.cursor/cc-context.json` for the `"workspace"` field
+1. Read `~/.command-center/cc-context.json` for the `"workspace"` field
 2. Check the open `.code-workspace` filename (e.g., `platform.code-workspace` → `platform`)
 3. Ask the user
 
@@ -128,8 +128,9 @@ Parse commit message for task/ticket references. Offer: "I see you committed '[m
 ### After PR Creation / Merge
 
 **PR Created:** When `gh pr create` executes:
-1. Capture the PR URL from output
-2. Add to task file under "Pull Requests" section automatically:
+1. Read `~/.command-center/cc-last-pr.txt` if present (written by the after-shell hook)
+2. Or capture the PR URL from command output
+3. Add to task file under "Pull Requests" section automatically:
 
 ```markdown
 | repo-name | [#N](url) | Description | Open |

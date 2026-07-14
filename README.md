@@ -8,7 +8,7 @@ A Cursor plugin that brings order to multi-repo chaos. Workspace management, tas
 
 <p align="center">
   <img src="https://img.shields.io/badge/Marketplace-coming_soon-orange?style=flat" alt="Marketplace coming soon">
-  <img src="https://img.shields.io/badge/version-0.2.0-blue?style=flat" alt="Version 0.2.0">
+  <img src="https://img.shields.io/badge/version-0.2.1-blue?style=flat" alt="Version 0.2.1">
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat" alt="MIT License">
 </p>
 
@@ -19,6 +19,14 @@ https://github.com/user-attachments/assets/ad786927-1b77-4bfc-8490-0ca37b224341
 </p>
 
 ---
+
+## What's New in v0.2.1
+
+- **Hardened session hooks** — Python JSON parsing; context files moved to `~/.command-center/` (no project git leaks)
+- **Missions opt-in at session start** — no dashboard regen or mission scan until roles are seeded
+- **Prerequisites** documented; **CHANGELOG.md** added
+
+See [CHANGELOG.md](CHANGELOG.md) for full history.
 
 ## What's New in v0.2.0
 
@@ -66,6 +74,18 @@ This release merges the open feature branches into `main`:
 <p align="center">
   <img src="assets/overview.png" alt="Command Center Overview" width="700">
 </p>
+
+---
+
+## Prerequisites
+
+| Tool | Required | Used for |
+|------|----------|----------|
+| **Cursor** | Yes | Plugin host |
+| **git** | Yes | Workspace repos, status, PR workflow |
+| **python3** | Yes | Session hooks, dashboard generator, file locks |
+| **gh** | Recommended | PR creation/linking (`gh pr create`) |
+| **jq** | Optional | Not required — hooks use Python for JSON |
 
 ---
 
@@ -336,8 +356,8 @@ If you used the [cursor-command-center](https://github.com/lionelresnik/cursor-c
 
 | Hook | What it does |
 |------|-------------|
-| Session start | Workspace detection, profile, todos, idle recap, active mission, dashboard regen |
-| After shell execution | Captures PR URLs from git commands |
+| Session start | Workspace detection, profile, todos, idle recap → writes `~/.command-center/cc-context.json` |
+| After shell execution | Captures PR URLs to `~/.command-center/cc-last-pr.txt` |
 | Session end | Saves session state for next recap |
 
 ---
@@ -369,6 +389,10 @@ All Command Center data lives in `~/.command-center/`:
 | `standups/` | Daily and weekly standup summaries |
 | `daily-log/` | Session work logs (when used) |
 | `todos.md` | Persistent todo list across all workspaces |
+| `cc-context.json` | Session context (workspace, idle hours, todos counts) — written by session-start hook |
+| `cc-last-pr.txt` | Temp PR URL from shell hook (cleared on session end) |
+| `locks/` | File locks for concurrent todo/mission writes |
+| `logs/` | Session debug log (timestamp parse failures, etc.) |
 | `roles/` | Mission role prompts |
 | `crews/` | Ordered role lists for crews |
 | `missions/` | Mission JSON, artifacts, checkpoints |
@@ -429,6 +453,8 @@ command-center/
 ├── hooks/
 │   └── hooks.json
 └── scripts/
+    ├── cc_session.py           # Session hooks (JSON-safe)
+    ├── cc_lock.py              # File locking for todos/missions
     ├── session-start.sh
     ├── session-end.sh
     ├── after-shell-execution.sh

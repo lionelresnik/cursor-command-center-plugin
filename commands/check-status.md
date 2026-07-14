@@ -7,7 +7,7 @@ description: Quick git status check across all repos in the current or specified
 
 Run a git status check across all repos:
 
-1. **Detect workspace** from `.cursor/cc-context.json` or ask the user
+1. **Detect workspace** from `~/.command-center/cc-context.json` or ask the user
 2. **Read repo list** from `contexts/[workspace].repos`
 3. **For each repo**, run git fetch and check status
 4. **Display summary** grouped by workspace

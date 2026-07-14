@@ -62,7 +62,7 @@ Use `@lu` for: standups, todo management, workspace switching, graph generation,
 ## Workspace Detection
 
 Always resolve workspace using this priority order:
-1. Read `~/.command-center/.cursor/cc-context.json` → `"workspace"` field
+1. Read `~/.command-center/cc-context.json` → `"workspace"` field
 2. Read the open `.code-workspace` file directly for its `folders` list
 3. Ask the user
 

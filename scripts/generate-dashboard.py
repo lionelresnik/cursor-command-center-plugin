@@ -128,11 +128,11 @@ def build_data() -> dict:
     active = [m for m in missions if m.get("status") not in ("done", "failed")]
     awaiting = sum(1 for m in missions if m.get("status") == "awaiting_review")
     profile = read_profile()
-    ctx_file = Path(".cursor/cc-context.json")
+    ctx_file = CC_DIR / "cc-context.json"
     workspace = ""
-    if (Path.cwd() / ctx_file).exists():
+    if ctx_file.exists():
         try:
-            workspace = json.loads((Path.cwd() / ctx_file).read_text()).get("workspace", "")
+            workspace = json.loads(ctx_file.read_text()).get("workspace", "")
         except json.JSONDecodeError:
             pass
 

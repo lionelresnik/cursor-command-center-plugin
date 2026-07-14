@@ -7,10 +7,10 @@ description: Create, open, and manage multi-repo workspaces. Scans directories f
 
 ## Determining the Current Workspace
 
-**ALWAYS read `.cursor/cc-context.json` first** to determine which workspace you're in. The `"workspace"` field tells you the current workspace name (e.g., `"platform"`, `"cspm"`, `"backend"`).
+**ALWAYS read `~/.command-center/cc-context.json` first** to determine which workspace you're in. The `"workspace"` field tells you the current workspace name (e.g., `"platform"`, `"cspm"`, `"backend"`).
 
 ```bash
-cat ~/.command-center/.cursor/cc-context.json | grep '"workspace"'
+python3 -c "import json; print(json.load(open('$HOME/.command-center/cc-context.json')).get('workspace',''))"
 ```
 
 **DO NOT guess the workspace from open files** — a user might have `server/go.mod` open but be in the `platform` workspace, not `cspm`. The `cc-context.json` is the source of truth.
@@ -104,7 +104,7 @@ What sounds good?
 
 ## Adding Repos to a Workspace
 
-1. **Read `.cursor/cc-context.json`** to get the current workspace name
+1. **Read `~/.command-center/cc-context.json`** to get the current workspace name
 2. If user says "add to this workspace" or "add to the current workspace", use that workspace — **don't ask**
 3. If user specifies a different workspace, use that one
 4. If unclear, ask which workspace to modify (list available from `contexts/*.repos`)

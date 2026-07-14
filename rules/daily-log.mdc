@@ -55,4 +55,4 @@ Each entry is one JSON line appended to the file. Create the directory and file 
 3. **Keep it short** — the action should be one sentence, ~10-20 words
 4. **Don't ask permission** — just append silently, don't tell the user you're logging
 5. **Don't duplicate** — if you already logged the same action in the current conversation, skip it
-6. **Read cc-context.json** for workspace name if available, otherwise infer from the open repo
+6. **Read `~/.command-center/cc-context.json`** for workspace name if available, otherwise infer from the open repo

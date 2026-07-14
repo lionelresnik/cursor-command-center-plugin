@@ -86,7 +86,7 @@ Inject into every role prompt:
 
 `@lu new mission "Fix JWT refresh" crew:backend-crew workspace:platform behavior:ask_me`
 
-1. Resolve workspace from arg or `cc-context.json`
+1. Resolve workspace from arg or `~/.command-center/cc-context.json`
 2. Load crew YAML; build linear `taskGraph` from ordered members
 3. Load role files for `roleName` from frontmatter
 4. Create mission folder + `mission.json` with `status: pending`
