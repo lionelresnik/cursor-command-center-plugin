@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 # Install or update Command Center in Cursor's local plugins directory.
-set -euo pipefail
+set -eo pipefail
 
-# Temporarily disable unbound variable checking for safe fallback assignment
-set +u
 REPO="${COMMAND_CENTER_PLUGIN_REPO:-https://github.com/lionelresnik/cursor-command-center-plugin.git}"
 PLUGIN_DIR="${CURSOR_PLUGIN_DIR:-$HOME/.cursor/plugins/local/command-center}"
-set -u
 
 echo "→ Command Center plugin → $PLUGIN_DIR"
 
