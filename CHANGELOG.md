@@ -2,6 +2,10 @@
 
 All notable changes to the Command Center Cursor plugin.
 
+## [Unreleased]
+
+- Fox Protocol **Option 5 (Rooftop):** remove heavy colon/hash ASCII (tripped Cursor Agent Looping); keep quote-only. Other Options unchanged.
+
 ## [0.3.1] — 2026-07-22
 
 - **Invoke without `@`** — Cursor short agent mentions like `@lu` are unreliable. Start messages with plain `lu` / `lucius` instead (`rules/invoke-lu.mdc`).
