@@ -2,6 +2,13 @@
 
 All notable changes to the Command Center Cursor plugin.
 
+## [0.3.1] — 2026-07-22
+
+- **Invoke without `@`** — Cursor short agent mentions like `@lu` are unreliable. Start messages with plain `lu` / `lucius` instead (`rules/invoke-lu.mdc`).
+- **Fox Protocol** restored as requestable `rules/fox-protocol.mdc` so Batman triggers work outside the Lucius agent mention.
+- Easter-egg art copied to `~/.command-center/assets/easter-egg-art.md` on install (fixes broken path that pointed only at that home path).
+- Docs, help, install scripts, and dashboard copy updated to say `lu …` not `@lu …`.
+
 ## [0.3.0] — 2026-07-14
 
 ### Changed (architecture)

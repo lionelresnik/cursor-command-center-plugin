@@ -195,7 +195,7 @@
 <body>
   <div class="banner">
     <span><strong>Preview</strong> — mock data · generated static HTML · no server</span>
-    <span>Regenerate via <code>@lu dashboard</code> (planned)</span>
+    <span>Regenerate via <code>lu dashboard</code> (planned)</span>
   </div>
 
   <header>
@@ -244,7 +244,7 @@
   </footer>
 
   <script>
-    // Mock data — in production, the @lu dashboard skill inlines this from ~/.command-center/
+    // Mock data — in production, the lu dashboard skill inlines this from ~/.command-center/
     const DATA = {
       user: { name: "Lionel" },
       workspace: "platform",
@@ -378,7 +378,7 @@
             <strong>Paused for handoff</strong> — review Backend Engineer artifact before starting Reviewer.<br />
             ${m.assumptions ? m.assumptions + " assumption(s) logged · " : ""}Behavior: ${behaviorLabel(m.agentBehavior)}
             <div class="handoff-actions">
-              <button type="button" class="primary">@lu next role</button>
+              <button type="button" class="primary">lu next role</button>
               <button type="button">View artifact</button>
               <button type="button">Mission status</button>
             </div>

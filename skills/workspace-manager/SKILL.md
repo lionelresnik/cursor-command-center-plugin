@@ -82,7 +82,7 @@ When user asks to create a workspace:
 8. Save to `workspaces/[name].code-workspace`
 9. Update `~/.command-center/session-state.json` with `"lastWorkspace": "[name]"` so the next window picks it up
 10. Offer to open it: `cursor ~/.command-center/workspaces/[name].code-workspace`
-11. Tell the user: "When the new window opens, just type `@lucius` or `@lu` — I'll know who you are and which workspace you're in."
+11. Tell the user: "When the new window opens, just type `lucius` or `lu` — I'll know who you are and which workspace you're in."
 
 ## First Time in a New Workspace
 

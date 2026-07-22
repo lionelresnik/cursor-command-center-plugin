@@ -212,9 +212,9 @@ graph TD
 ## When User Explicitly Tells You Something
 
 If the user says things like:
-> "@lu note: the orders queue ARN is arn:aws:sqs:us-east-1:123456789:orders-queue"
-> "@lu save this: logs are in Datadog under service:checkout"
-> "@lu the prod DB is at db.prod.internal"
+> "lu note: the orders queue ARN is arn:aws:sqs:us-east-1:123456789:orders-queue"
+> "lu save this: logs are in Datadog under service:checkout"
+> "lu the prod DB is at db.prod.internal"
 
 Write it immediately to the correct doc without asking. Confirm in one line.
 
@@ -222,4 +222,4 @@ Write it immediately to the correct doc without asking. Confirm in one line.
 
 ## Onboarding Gap Check
 
-When `@lu onboard [workspace]` is invoked, use the `onboard` skill — don't use this rule directly.
+When `lu onboard [workspace]` is invoked, use the `onboard` skill — don't use this rule directly.

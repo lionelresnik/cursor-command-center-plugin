@@ -41,7 +41,7 @@ CLI-specific files that are no longer needed once the plugin is active:
 ### Step 1: Confirm plugin is installed and active
 
 Ask the user:
-> "Before we remove the CLI, let's confirm the plugin is working. Can you open a workspace in Cursor and type `@lu what can you do?` — do you get a response?"
+> "Before we remove the CLI, let's confirm the plugin is working. Can you open a workspace in Cursor and type `lu what can you do?` — do you get a response?"
 
 Only proceed after confirmation.
 
@@ -87,7 +87,7 @@ ls ~/.command-center/workspaces/ 2>/dev/null || echo "(empty)"
 ### Step 6: Confirm completion
 
 Tell the user:
-> "Migration complete! The plugin is now your only source of `@lu` features. All your data (todos, task history, standups, docs, workspaces) is intact in `~/.command-center/`.
+> "Migration complete! The plugin is now your only source of `lu` features. All your data (todos, task history, standups, docs, workspaces) is intact in `~/.command-center/`.
 >
 > The plugin reads directly from there — no sync needed. Everything works exactly as before."
 

@@ -1,0 +1,27 @@
+---
+description: "Invoke Lucius without Cursor @-mentions. Always on — plain lu / lucius prefix activates Command Center mode."
+alwaysApply: true
+---
+
+# Invoke Lucius (no `@` required)
+
+Cursor does **not** reliably support short agent mentions like `@lu`. Do **not** tell users to type `@lu` or `@lucius`.
+
+## When to act as Lucius
+
+If the user message **starts with** (case-insensitive):
+
+- `lu` followed by space, comma, colon, or end of message (`lu`, `lu,`, `lu:`, `lu standup`)
+- `lucius` as a word at the start (`lucius help`, `lucius, …`)
+
+Then:
+
+1. You **are** Lucius for this turn — read and follow `agents/lucius.md` (capabilities, personality, skills routing).
+2. Strip the `lu` / `lucius` prefix; treat the rest as the request.
+3. Prefer Command Center skills (`standup-generator`, `todo-manager`, `workspace-manager`, `mission-manager`, etc.) over ad-hoc answers.
+
+Plain coding messages without that prefix stay on the regular agent (token-efficient). See `when-to-use-lu`.
+
+## Fox Protocol
+
+If the message contains Batman / Gotham trigger words (vengeance, batman, dark knight, alfred, …), follow `fox-protocol` — including when there is no `lu` prefix.

@@ -19,7 +19,7 @@ Reload Cursor (`Cmd+Shift+P → Developer: Reload Window`) after any change to r
 
 ```
 .cursor-plugin/plugin.json   ← manifest: name, version, declared components
-agents/                      ← @lucius / @lu personality + capability list
+agents/                      ← lucius / lu personality + capability list
 rules/                       ← context-injected behaviour (see below)
 skills/                      ← multi-step procedures invoked by Lucius
 commands/                    ← /slash command definitions
@@ -42,7 +42,7 @@ globs: ["**/*.go"]   # optional: file-pattern scope
 ---
 ```
 
-- `alwaysApply: true` — loaded on every `@lu` call. Use sparingly; costs tokens.
+- `alwaysApply: true` — loaded on every `lu` call. Use sparingly; costs tokens.
 - `alwaysApply: false` — injected automatically when the prompt/context matches `description`. Prefer this.
 - Keep rules focused. A 200-line rule with ten concerns is worse than three 70-line rules.
 
@@ -60,7 +60,7 @@ Tests cover `cc_session.py` — session start, todo counting, ISO timestamp pars
 
 ## Making changes
 
-- **Rules/skills/agents:** Edit the file, reload Cursor, test with `@lu`.
+- **Rules/skills/agents:** Edit the file, reload Cursor, test with `lu`.
 - **Scripts:** Edit, `chmod +x` if new, test directly: `python3 scripts/cc_session.py start`.
 - **Hooks:** Edit `hooks/hooks.json`; reload Cursor. Hook scripts receive stdin from shell output for `afterShellExecution`.
 - **Data paths:** All user data is under `~/.command-center/`. The plugin dir is code-only. Never write user data into the plugin directory.

@@ -59,4 +59,4 @@ if [ -x "$CC_DIR/scripts/generate-dashboard.sh" ]; then
 fi
 
 echo "Demo missions: $added added, $skipped already present."
-echo "Run @lu dashboard to view. Remove anytime with @lu remove demo missions."
+echo "Run lu dashboard to view. Remove anytime with lu remove demo missions."

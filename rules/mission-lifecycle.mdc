@@ -1,5 +1,5 @@
 ---
-description: "Multi-role mission lifecycle — when to create missions vs task files, graph updates, and handoff gates. Apply when user mentions missions, crews, roles, @lu next role, or complete role."
+description: "Multi-role mission lifecycle — when to create missions vs task files, graph updates, and handoff gates. Apply when user mentions missions, crews, roles, lu next role, or complete role."
 alwaysApply: false
 ---
 
@@ -12,7 +12,7 @@ Missions are **optional**. Use them for crew-based multi-step work. Use `task-hi
 Create a mission when:
 - User names a **crew** or multi-step workflow (implement → review → document)
 - Work spans **multiple sessions** with defined roles
-- User explicitly says `@lu new mission`
+- User explicitly says `lu new mission`
 
 Stay with task files only when:
 - Single-session fix or investigation
@@ -25,8 +25,8 @@ All under `~/.command-center/` — never in the workspace repo root.
 ## Handoff gate
 
 When `handoffMode` is `manual` (default):
-- After `@lu complete role`, set mission `status` to `awaiting_review`
-- Do **not** auto-start the next role until user runs `@lu next role`
+- After `lu complete role`, set mission `status` to `awaiting_review`
+- Do **not** auto-start the next role until user runs `lu next role`
 
 ## Behavior prefixes
 
@@ -45,5 +45,5 @@ If a task file exists for the same ticket, add `missionId` to task frontmatter w
 ## After mission done
 
 - Offer to update related task file status
-- Offer `@lu dashboard` refresh
-- Offer standup-worthy summary line for next `@lu standup`
+- Offer `lu dashboard` refresh
+- Offer standup-worthy summary line for next `lu standup`

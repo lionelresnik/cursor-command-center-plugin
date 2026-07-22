@@ -1,6 +1,6 @@
 ---
 name: onboard
-description: Workspace knowledge base gap finder. Shows what infrastructure knowledge is already documented and what's missing for a workspace — databases, cloud resources, logs, services. Invoke with "@lu onboard [workspace]" or "@lu onboard" for current workspace.
+description: Workspace knowledge base gap finder. Shows what infrastructure knowledge is already documented and what's missing for a workspace — databases, cloud resources, logs, services. Invoke with "lu onboard [workspace]" or "lu onboard" for current workspace.
 ---
 
 # Onboard Skill
@@ -11,7 +11,7 @@ This skill does **not** run an upfront interview. It shows you what's already kn
 
 Knowledge fills in two ways:
 1. **Passively** — `infrastructure-knowledge.mdc` captures things as you work
-2. **Explicitly** — you tell `@lu` something and it writes it down
+2. **Explicitly** — you tell `lu` something and it writes it down
 
 This skill is the **inventory view** and optional **gap filler**.
 
@@ -22,7 +22,7 @@ This skill is the **inventory view** and optional **gap filler**.
 ### Step 1: Resolve Workspace
 
 Read `~/.command-center/cc-context.json` for the `"workspace"` field.
-If not found, use the workspace name provided by the user (e.g., `@lu onboard backend` → workspace is `backend`).
+If not found, use the workspace name provided by the user (e.g., `lu onboard backend` → workspace is `backend`).
 
 ### Step 2: Read Existing Docs
 
@@ -73,7 +73,7 @@ If the user says skip/later/no — confirm:
 
 ### Step 5: Explicit Notes Mode
 
-If the user uses this skill to record something specific (e.g., `@lu onboard — the prod DB is at db.prod.internal`):
+If the user uses this skill to record something specific (e.g., `lu onboard — the prod DB is at db.prod.internal`):
 - Write it immediately to the correct doc
 - Don't run the full gap report
 - Confirm in one line and move on

@@ -9,7 +9,7 @@ Show the user this overview. Introduce yourself as **Lucius** (or **Lu** for sho
 
 ## How to Reach Me
 
-Type `@lucius` or `@lu` in chat, then ask naturally. Or use these shortcuts:
+Type `lucius` or `lu` in chat, then ask naturally. Or use these shortcuts:
 
 ## Commands (type / in chat)
 
@@ -47,21 +47,21 @@ These apply automatically in every session:
 
 ## Quick Examples
 
-- `@lucius set up a new workspace with my backend repos`
-- `@lu check git status across all repos`
-- `@lucius generate an architecture graph for my platform workspace`
-- `@lu what's next on my todo list?`
-- `@lucius add "fix auth bug" to my todos`
-- `@lu mark the auth task as done`
-- `@lu export my config`
-- `@lucius what PRs are open for this task?`
-- `@lu standup` or `@lu weekly`
-- `@lu init missions` — repair/seed roles, crews, dashboard tools (also runs on install)
-- `@lu init demo missions` — add 3 sample missions for the dashboard
-- `@lu remove demo missions` — delete sample missions only
-- `@lu new mission "Fix auth bug" crew:backend-crew behavior:ask_me`
-- `@lu next role` / `@lu complete role`
-- `@lu dashboard` — open mission board in Simple Browser
+- `lucius set up a new workspace with my backend repos`
+- `lu check git status across all repos`
+- `lucius generate an architecture graph for my platform workspace`
+- `lu what's next on my todo list?`
+- `lucius add "fix auth bug" to my todos`
+- `lu mark the auth task as done`
+- `lu export my config`
+- `lucius what PRs are open for this task?`
+- `lu standup` or `lu weekly`
+- `lu init missions` — repair/seed roles, crews, dashboard tools (also runs on install)
+- `lu init demo missions` — add 3 sample missions for the dashboard
+- `lu remove demo missions` — delete sample missions only
+- `lu new mission "Fix auth bug" crew:backend-crew behavior:ask_me`
+- `lu next role` / `lu complete role`
+- `lu dashboard` — open mission board in Simple Browser
 
 ## Data Location
 
@@ -74,7 +74,7 @@ All Command Center data lives in `~/.command-center/`:
 - `roles/` — mission role prompts (`*.md`)
 - `crews/` — ordered role lists (`*.yaml`)
 - `missions/` — mission state, artifacts, checkpoints
-- `dashboard/index.html` — generated static board (run `@lu dashboard`)
+- `dashboard/index.html` — generated static board (run `lu dashboard`)
 
 ## Tips
 

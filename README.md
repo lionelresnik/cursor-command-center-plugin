@@ -4,11 +4,11 @@
 
 A Cursor plugin that brings order to multi-repo chaos. Workspace management, task tracking, PR linking, git status, architecture graphs, todo lists, standups, workspace knowledge base, **missions & crews**, and a static dashboard — all from chat.
 
-**Meet Lucius** (`@lucius` or `@lu` for short) — your AI assistant who knows where everything is, how it all connects, and what needs doing next.
+**Meet Lucius** (`lucius` or `lu` for short) — your AI assistant who knows where everything is, how it all connects, and what needs doing next.
 
 <p align="center">
   <img src="https://img.shields.io/badge/Marketplace-coming_soon-orange?style=flat" alt="Marketplace coming soon">
-  <img src="https://img.shields.io/badge/version-0.3.0-blue?style=flat" alt="Version 0.3.0">
+  <img src="https://img.shields.io/badge/version-0.3.1-blue?style=flat" alt="Version 0.3.1">
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat" alt="MIT License">
 </p>
 
@@ -54,17 +54,17 @@ This release merges the open feature branches into `main`:
 
 | Merged work | Highlights |
 |-------------|------------|
-| **Audit & token reduction** (#3) | Leaner `@lu` usage guidance, consolidated rules, improved session-start context |
+| **Audit & token reduction** (#3) | Leaner `lu` usage guidance, consolidated rules, improved session-start context |
 | **Daily log** (#2) | Real-time work logging integrated with standups |
 | **Docs & markdown style** (#1) | Confluence-style doc templates, graph delegation, CLI migration skill |
 | **Missions & crews** (new) | Multi-role missions, manual handoffs, behavior modes, static dashboard |
 
 **New capabilities:**
 - **Workspace knowledge base** — infra, databases, logs, services, runbooks under `docs/[workspace]/`
-- **`@lu onboard`** — gap report for what's documented vs missing
-- **Missions** — `@lu init missions`, `@lu new mission`, `@lu next role`, `@lu complete role`
-- **Static dashboard** — `@lu dashboard` → open `~/.command-center/dashboard/index.html` in Simple Browser
-- **Migrate from CLI** — `@lu migrate from CLI` preserves all `~/.command-center/` data
+- **`lu onboard`** — gap report for what's documented vs missing
+- **Missions** — `lu init missions`, `lu new mission`, `lu next role`, `lu complete role`
+- **Static dashboard** — `lu dashboard` → open `~/.command-center/dashboard/index.html` in Simple Browser
+- **Migrate from CLI** — `lu migrate from CLI` preserves all `~/.command-center/` data
 - **Preview dashboard** — open `assets/dashboard-preview.html` in Simple Browser to see the UI with mock data
 
 ---
@@ -83,11 +83,11 @@ This release merges the open feature branches into `main`:
 | **Daily Recap** | Time-aware greetings, session recaps, and standup prompts after idle |
 | **Daily Log** | Session work log integrated with standups and recaps |
 | **Knowledge Base** | Workspace docs — infra, databases, logs, services, runbooks |
-| **Onboarding** | Gap report for undocumented workspace knowledge (`@lu onboard`) |
+| **Onboarding** | Gap report for undocumented workspace knowledge (`lu onboard`) |
 | **Personalization** | Remembers your name, preferences, and work schedule across sessions |
 | **Export/Import** | Backup and restore workspaces, todos, docs, missions, roles, crews |
 | **Missions & Crews** | Multi-role missions, manual handoffs, agent behavior modes, artifacts |
-| **Static Dashboard** | Visual mission board — no server (`@lu dashboard`) |
+| **Static Dashboard** | Visual mission board — no server (`lu dashboard`) |
 | **CLI Migration** | Move from [cursor-command-center](https://github.com/lionelresnik/cursor-command-center) CLI without losing data |
 | **Cross-Repo Context** | `@Codebase` searches all repos in your workspace at once |
 
@@ -142,11 +142,11 @@ chmod +x ~/.cursor/plugins/local/command-center/scripts/cc_session.py \
 
 1. **Reload Cursor** — `Cmd+Shift+P` → **Developer: Reload Window**
 2. **Enable plugin** — **Cursor Settings → Plugins** → enable **command-center**
-3. **Verify** — type `@lucius help` in chat
+3. **Verify** — type `lucius help` in chat
 
 The install script automatically seeds **roles, crews, and dashboard tools** into `~/.command-center/` (idempotent — skips files you already have).
 
-**Optional:** `@lu init demo missions` for sample missions on the dashboard; `@lu remove demo missions` to clean them up.
+**Optional:** `lu init demo missions` for sample missions on the dashboard; `lu remove demo missions` to clean them up.
 
 Your data (`~/.command-center/`) is separate from the plugin — updates do not touch todos, task history, or docs.
 
@@ -198,40 +198,40 @@ Reload Cursor after each change to rules/skills/agents.
 ## Quick Start
 
 1. **Install the plugin** — see [Install](#install-manual--not-on-marketplace-yet) above (seeds roles, crews, dashboard tools automatically)
-2. **Type `@lucius help`** to see everything available (or `@lu` for short)
+2. **Type `lucius help`** to see everything available (or `lu` for short)
 3. **Follow the intro** — Lucius will ask your name and remember it
-4. **Type `@lucius setup a new workspace`** and follow the guided setup
-5. **Optional:** `@lu init demo missions` — sample missions for the dashboard
+4. **Type `lucius setup a new workspace`** and follow the guided setup
+5. **Optional:** `lu init demo missions` — sample missions for the dashboard
 6. **Start working** — task tracking, PR linking, and todo management happen automatically
 
 ---
 
 ## Meet Lucius
 
-Lucius is your Command Center AI assistant. Type `@lucius` or `@lu` in chat and talk naturally:
+Lucius is your Command Center AI assistant. Type `lucius` or `lu` in chat and talk naturally:
 
 ```
-@lucius set up a new workspace called backend with repos from ~/Projects
-@lu check git status across all my repos
-@lucius generate an architecture graph for the backend workspace
-@lu what's next on my todo list?
-@lucius add "fix auth bug" to my todos as high priority
-@lu mark the auth task as done
-@lu add server and api-gateway to my platform workspace
-@lucius export my config for backup
-@lu what PRs are open for this task?
-@lucius what's left to do?
-@lu have I forgotten something?
-@lu standup
-@lucius weekly recap
-@lu init missions
-@lu init demo missions
-@lu remove demo missions
-@lu new mission "Fix auth bug" crew:backend-crew
-@lu next role
-@lu dashboard
-@lu onboard
-@lu migrate from CLI
+lucius set up a new workspace called backend with repos from ~/Projects
+lu check git status across all my repos
+lucius generate an architecture graph for the backend workspace
+lu what's next on my todo list?
+lucius add "fix auth bug" to my todos as high priority
+lu mark the auth task as done
+lu add server and api-gateway to my platform workspace
+lucius export my config for backup
+lu what PRs are open for this task?
+lucius what's left to do?
+lu have I forgotten something?
+lu standup
+lucius weekly recap
+lu init missions
+lu init demo missions
+lu remove demo missions
+lu new mission "Fix auth bug" crew:backend-crew
+lu next role
+lu dashboard
+lu onboard
+lu migrate from CLI
 ```
 
 Lucius remembers your name and work schedule, greets you based on time of day, recaps what you were working on, and offers standup summaries at the start of each day or week.
@@ -297,20 +297,20 @@ Structured docs under `~/.command-center/docs/[workspace]/`:
 - **Services** — architecture overviews per service
 - **Runbooks** — operational procedures
 
-Findings from tasks are captured automatically (`auto-doc-updates`, `infrastructure-knowledge`). Use **`@lu onboard`** for a gap report of what's documented vs missing.
+Findings from tasks are captured automatically (`auto-doc-updates`, `infrastructure-knowledge`). Use **`lu onboard`** for a gap report of what's documented vs missing.
 
 ### Missions & Crews
 
 Optional multi-role workflows for work that spans sessions (implement → review → document):
 
-1. **Install the plugin** — roles/crews/dashboard tools are seeded automatically (or run `@lu init missions` to repair)
-2. **`@lu init demo missions`** — optional sample missions for the board
-3. **`@lu new mission "…" crew:backend-crew behavior:ask_me`** — create a mission
-4. **`@lu next role`** — get the role prompt bundle (then use the **regular agent** for coding)
-5. **`@lu complete role`** — save artifact; mission pauses for review (default)
-6. **`@lu dashboard`** — regenerate and open the static board in Simple Browser
+1. **Install the plugin** — roles/crews/dashboard tools are seeded automatically (or run `lu init missions` to repair)
+2. **`lu init demo missions`** — optional sample missions for the board
+3. **`lu new mission "…" crew:backend-crew behavior:ask_me`** — create a mission
+4. **`lu next role`** — get the role prompt bundle (then use the **regular agent** for coding)
+5. **`lu complete role`** — save artifact; mission pauses for review (default)
+6. **`lu dashboard`** — regenerate and open the static board in Simple Browser
 
-Remove sample data anytime: **`@lu remove demo missions`** (keeps roles, crews, and your real missions).
+Remove sample data anytime: **`lu remove demo missions`** (keeps roles, crews, and your real missions).
 
 **Agent behavior modes** (per mission):
 
@@ -329,10 +329,10 @@ Plain Cursor Plan mode hands off via **Build** on the plan markdown (`.cursor/pl
 | Step | What to do |
 |------|------------|
 | After Plan mode | Save decisions to the **task file** (`Analysis`, `Key Decisions`) — Lucius offers this when exiting Plan mode |
-| Create mission | `@lu new mission "…" crew:backend-crew ticket:AUTH-123` — links via `ticket` + `missionId` in task frontmatter |
-| Start work | `@lu next role` — role prompt should include linked task file sections (not full chat history) |
+| Create mission | `lu new mission "…" crew:backend-crew ticket:AUTH-123` — links via `ticket` + `missionId` in task frontmatter |
+| Start work | `lu next role` — role prompt should include linked task file sections (not full chat history) |
 
-If the plan never reached the task file, the mission only gets the one-line `goal` unless you use `@lu checkpoint` or save the plan first. For simple fixes, use Cursor **Build** directly; use missions when you want crew handoffs across sessions.
+If the plan never reached the task file, the mission only gets the one-line `goal` unless you use `lu checkpoint` or save the plan first. For simple fixes, use Cursor **Build** directly; use missions when you want crew handoffs across sessions.
 
 Plan-first with crews: run a planning step into the task file (or a prior mission artifact), then start a backend crew mission that reads that file.
 
@@ -342,11 +342,11 @@ Backup and restore workspaces, repo lists, todos, profile, task history, docs, s
 
 ### Token Efficiency
 
-`@lu` loads workspace context — great for standups, todos, missions, and cross-repo questions. For **pure coding** (debugging, reviews, refactors), use the **regular agent** to save tokens. See `rules/when-to-use-lu.mdc`.
+`lu` loads workspace context — great for standups, todos, missions, and cross-repo questions. For **pure coding** (debugging, reviews, refactors), use the **regular agent** to save tokens. See `rules/when-to-use-lu.mdc`.
 
 ### Migrating from the CLI
 
-If you used the [cursor-command-center](https://github.com/lionelresnik/cursor-command-center) CLI, say **`@lu migrate from CLI`**. The plugin reads the same `~/.command-center/` directory — no data migration needed.
+If you used the [cursor-command-center](https://github.com/lionelresnik/cursor-command-center) CLI, say **`lu migrate from CLI`**. The plugin reads the same `~/.command-center/` directory — no data migration needed.
 
 ---
 
@@ -391,11 +391,12 @@ If you used the [cursor-command-center](https://github.com/lionelresnik/cursor-c
 | `daily-recap` | Time-aware greetings, recaps, standup prompts |
 | `mission-lifecycle` | Mission vs task files, handoff gates |
 | `assumption-capture` | `ASSUMPTION:` lines from missions → docs |
-| `when-to-use-lu` | When `@lu` saves tokens vs regular agent |
+| `when-to-use-lu` | When `lu` saves tokens vs regular agent |
 | `personalization` | Name, preferences, work schedule |
 | `commit-style` | Commit message conventions |
 | `naming-conventions` | `.code-workspace` naming (contextual) |
-| `easter-egg` | The Fox Protocol |
+| `fox-protocol` | The Fox Protocol (Batman triggers) |
+| `invoke-lu` | Plain `lu` prefix — no `@` mention |
 
 ### Hooks (automatic)
 
@@ -442,7 +443,7 @@ All Command Center data lives in `~/.command-center/`:
 | `roles/` | Mission role prompts |
 | `crews/` | Ordered role lists for crews |
 | `missions/` | Mission JSON, artifacts, checkpoints |
-| `dashboard/index.html` | Generated static board (`@lu dashboard`) |
+| `dashboard/index.html` | Generated static board (`lu dashboard`) |
 | `profile.json` | Your name and preferences |
 | `session-state.json` | Last session timestamp for recap detection |
 
@@ -466,7 +467,8 @@ command-center/
 │   ├── personalization.mdc
 │   ├── commit-style.mdc
 │   ├── naming-conventions.mdc
-│   └── easter-egg.mdc
+│   ├── invoke-lu.mdc
+│   └── fox-protocol.mdc
 ├── skills/
 │   ├── workspace-manager/
 │   ├── graph-generator/
@@ -482,7 +484,7 @@ command-center/
 │   ├── crews/
 │   └── demo-missions/
 ├── agents/
-│   └── lucius.md             # @lucius and @lu
+│   └── lucius.md             # lucius and lu
 ├── commands/
 │   ├── help.md
 │   ├── setup-workspace.md
@@ -523,7 +525,7 @@ command-center/
 | [cursor-command-center](https://github.com/lionelresnik/cursor-command-center) CLI | Terminal menus, `./cc` workspace graph — same `~/.command-center/` data |
 | [Mission Control](https://github.com/lionelresnik/mission-control) | Optional team server with web UI, MCP, and shared DB (separate project) |
 
-Say **`@lu migrate from CLI`** when switching from CLI to this plugin.
+Say **`lu migrate from CLI`** when switching from CLI to this plugin.
 
 ---
 

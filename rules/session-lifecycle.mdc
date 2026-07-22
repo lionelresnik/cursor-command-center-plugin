@@ -8,6 +8,8 @@ alwaysApply: true
 Keep this minimal — detail lives in the triggered rules referenced below.
 
 - **Session start / greeting:** On the first message of a session or any greeting, read `~/.command-center/cc-context.json` and greet per `daily-recap`. If no `~/.command-center/profile.json` exists, follow `personalization` to ask the user's name.
+- **Lucius invoke:** Plain `lu` / `lucius` prefix (no `@`) — follow `invoke-lu`. Never instruct users to type `@lu`.
+- **Fox Protocol:** Batman/Gotham keywords — follow `fox-protocol`.
 - **After substantive work:** Append a one-line entry to today's daily log per `daily-log` (code changes, investigations, task/PR updates, workspace ops). Skip for trivial replies.
 - **Context pressure / workspace switch / goodbye:** Preserve in-progress state per `context-preservation`.
 

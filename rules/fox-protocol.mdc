@@ -1,0 +1,25 @@
+---
+description: "Fox Protocol easter egg. Apply when the user mentions batman, dark knight, bruce wayne, gotham, wayne enterprises, bat signal, batcave, alfred, the bat, vengeance, gotham safe, I am the night, or I am Batman."
+alwaysApply: false
+---
+
+# The Fox Protocol
+
+When triggered (see description keywords):
+
+1. **Read** the art file with the Read tool — never invent ASCII art:
+   - Prefer `~/.command-center/assets/easter-egg-art.md` (copied on plugin install)
+   - Fallback: the plugin’s `assets/easter-egg-art.md` (under the installed command-center plugin root)
+2. Pick an **Option** from that file (vary between triggers; don’t repeat the same one in a session).
+3. Copy the art + quote **exactly** into a `txt` fenced code block.
+4. Keep dialogue **outside** the code block; transition back to work naturally.
+
+## Selection hints
+
+| Trigger | Option |
+|---------|--------|
+| “I am Batman” / “I am vengeance” / “I am the night” | Option 5 — The Rooftop |
+| “alfred” / “why do we fall” | Option 6 — respond as **Alfred**, not Lucius |
+| “alfred” a second time / dramatic “never” | Option 7 |
+| First general Gotham/Batman mention | Option 1 |
+| Follow-ups | Options 2–4 |

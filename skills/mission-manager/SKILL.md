@@ -24,19 +24,19 @@ Mission `id`: `YYYY-MM-DD-slug` (e.g. `2026-07-14-fix-jwt`).
 
 ## Init defaults
 
-**On plugin install** (and `@lu init missions`): run `scripts/install-mission-tools.sh` — copies default roles, crews, and dashboard generator into `~/.command-center/`. Idempotent; does not overwrite your custom roles/crews.
+**On plugin install** (and `lu init missions`): run `scripts/install-mission-tools.sh` — copies default roles, crews, and dashboard generator into `~/.command-center/`. Idempotent; does not overwrite your custom roles/crews.
 
-**Does not create demo missions.** For sample data: `@lu init demo missions`.
+**Does not create demo missions.** For sample data: `lu init demo missions`.
 
 ## Demo missions
 
-**`@lu init demo missions`** (aliases: `@lu seed demo missions`)
+**`lu init demo missions`** (aliases: `lu seed demo missions`)
 
 1. Run `install-mission-tools.sh` if roles/crews are missing
 2. Run `scripts/seed-demo-missions.sh` — copies 3 tagged demo missions into `~/.command-center/missions/` and writes `demo-missions.json` marker
 3. Regenerate dashboard; tell user missions are prefixed `[Demo]` and safe to delete
 
-**`@lu remove demo missions`**
+**`lu remove demo missions`**
 
 1. Run `scripts/remove-demo-missions.sh` — removes missions listed in `demo-missions.json`, any `demo-*` folder, and any mission with `"demo": true` in `mission.json`
 2. Keeps roles, crews, and real missions untouched
@@ -84,7 +84,7 @@ Inject into every role prompt:
 
 ## New mission
 
-`@lu new mission "Fix JWT refresh" crew:backend-crew workspace:platform behavior:ask_me`
+`lu new mission "Fix JWT refresh" crew:backend-crew workspace:platform behavior:ask_me`
 
 1. Resolve workspace from arg or `~/.command-center/cc-context.json`
 2. Load crew YAML; build linear `taskGraph` from ordered members
@@ -93,11 +93,11 @@ Inject into every role prompt:
 5. Optionally link a todo or task file (`missionId` in frontmatter)
 6. Set `status: running` when first role starts
 7. Run `scripts/generate-dashboard.sh` if it exists (best effort)
-8. Tell user: `@lu next role` to begin
+8. Tell user: `lu next role` to begin
 
 ## Next role
 
-`@lu next role` or `@lu next role mission:2026-07-14-fix-jwt`
+`lu next role` or `lu next role mission:2026-07-14-fix-jwt`
 
 1. Find active mission (only one `running` or `awaiting_review` unless user specifies id)
 2. If `status` is `awaiting_review` and `handoffMode` is `manual`, confirm user is ready to continue
@@ -116,7 +116,7 @@ Inject into every role prompt:
 
 ## Complete role
 
-`@lu complete role` — user provides artifact content (from chat) or you summarize the session output.
+`lu complete role` — user provides artifact content (from chat) or you summarize the session output.
 
 1. Save `artifacts/{roleId}.md` with frontmatter (role, completedAt)
 2. Add 1–2 line summary to `artifactSummaries[roleId]`
@@ -137,29 +137,29 @@ Progress: {n}/{total} roles
 Assumptions logged: {count}
 
 Mission paused for review.
-  @lu next role       — continue
-  @lu mission status  — full graph
-  @lu dashboard       — open visual board
+  lu next role       — continue
+  lu mission status  — full graph
+  lu dashboard       — open visual board
 ```
 
 ## Mission status
 
-`@lu mission status` — list active and recent missions with graph, status, next role. No full artifact dumps unless user asks.
+`lu mission status` — list active and recent missions with graph, status, next role. No full artifact dumps unless user asks.
 
 ## Checkpoint
 
-`@lu checkpoint "Still investigating middleware order"` — append timestamped line to `checkpoints.md` for the running mission.
+`lu checkpoint "Still investigating middleware order"` — append timestamped line to `checkpoints.md` for the running mission.
 
 ## List / setup
 
-- `@lu list roles` — scan `roles/*.md`
-- `@lu list crews` — scan `crews/*.yaml`
-- `@lu add role "Security Reviewer"` — create role file from template
-- `@lu add crew "security-crew"` — create crew YAML (user defines members)
+- `lu list roles` — scan `roles/*.md`
+- `lu list crews` — scan `crews/*.yaml`
+- `lu add role "Security Reviewer"` — create role file from template
+- `lu add crew "security-crew"` — create crew YAML (user defines members)
 
 ## Dashboard
 
-`@lu dashboard` — run `~/.command-center`-relative or plugin `scripts/generate-dashboard.sh` to write `~/.command-center/dashboard/index.html`, then tell user to open Simple Browser:
+`lu dashboard` — run `~/.command-center`-relative or plugin `scripts/generate-dashboard.sh` to write `~/.command-center/dashboard/index.html`, then tell user to open Simple Browser:
 
 ```
 file://$HOME/.command-center/dashboard/index.html

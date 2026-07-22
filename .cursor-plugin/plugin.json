@@ -1,6 +1,6 @@
 {
   "name": "command-center",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Multi-repo workspace management with task tracking, PR linking, git status, architecture graphs, todos, standups, missions and crews, static dashboard, daily recaps, personalization, and export/import.",
   "author": {
     "name": "Lionel M. Resnik",
